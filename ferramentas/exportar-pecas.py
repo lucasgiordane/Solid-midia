@@ -5,7 +5,8 @@ Uso:
   python3 ferramentas/exportar-pecas.py <pasta-project-do-canvas> <pasta-saida> <arq1.dc.html> [arq2 ...]
        [--blobs <pasta com <id>.svg/png dos /_blob/<id>>] [--fontes <node_modules/@fontsource>]
 
-- Lê o solid.css da pasta do canvas e embute as fontes da marca (Montserrat, Source Sans 3, IBM Plex Mono)
+- Lê a folha de estilo que cada peça linka (solid.css ou solid26.css) e embute as fontes das duas identidades
+  (2025: Montserrat, Source Sans 3, IBM Plex Mono; 2026: Manrope, Inter, IBM Plex Mono)
   a partir dos pacotes @fontsource (npm install @fontsource/montserrat @fontsource/source-sans-3 @fontsource/ibm-plex-mono).
 - Troca cada /_blob/<id> pelo arquivo local <id>.* da pasta --blobs.
 - Tamanho de cada peça vem do $preview do próprio arquivo (1080x1350 feed, 1080x1920 story/reels).
@@ -23,7 +24,10 @@ os.makedirs(a.out, exist_ok=True)
 
 FONTES = [('Montserrat', 'montserrat/files/montserrat-latin-{w}-normal.woff2', [500, 600, 700, 800, 900]),
           ('Source Sans 3', 'source-sans-3/files/source-sans-3-latin-{w}-normal.woff2', [400, 600]),
-          ('IBM Plex Mono', 'ibm-plex-mono/files/ibm-plex-mono-latin-{w}-normal.woff2', [400, 600])]
+          ('IBM Plex Mono', 'ibm-plex-mono/files/ibm-plex-mono-latin-{w}-normal.woff2', [400, 500, 600]),
+          # identidade 2026 (npm install @fontsource/manrope @fontsource/inter)
+          ('Manrope', 'manrope/files/manrope-latin-{w}-normal.woff2', [500, 600, 700, 800]),
+          ('Inter', 'inter/files/inter-latin-{w}-normal.woff2', [400, 500, 600, 700])]
 faces, erro = [], False
 for fam, pat, ws in FONTES:
     for w in ws:
@@ -36,7 +40,17 @@ for fam, pat, ws in FONTES:
 fi = os.path.join(a.fontes, 'source-sans-3/files/source-sans-3-latin-400-italic.woff2')
 if os.path.exists(fi):
     faces.append("@font-face{font-family:'Source Sans 3';font-weight:400;font-style:italic;src:url(data:font/woff2;base64,%s) format('woff2');}" % base64.b64encode(open(fi, 'rb').read()).decode())
-css = open(os.path.join(a.proj, 'solid.css')).read()
+fi2 = os.path.join(a.fontes, 'inter/files/inter-latin-400-italic.woff2')
+if os.path.exists(fi2):
+    faces.append("@font-face{font-family:'Inter';font-weight:400;font-style:italic;src:url(data:font/woff2;base64,%s) format('woff2');}" % base64.b64encode(open(fi2, 'rb').read()).decode())
+# cada peça usa a folha de estilo que ela mesma linka (solid.css = visual 2025; solid26.css = identidade 2026)
+CSS = {}
+def css_da_peca(src):
+    m = re.search(r'<link rel="stylesheet" href="([^":/]+\.css)">', src)
+    nome = m.group(1) if m else 'solid.css'
+    if nome not in CSS:
+        CSS[nome] = open(os.path.join(a.proj, nome)).read()
+    return CSS[nome]
 
 def blob_uri(m):
     global erro
@@ -57,6 +71,7 @@ with sync_playwright() as pw:
         body = re.sub(r'/_blob/([0-9a-f]{32})', blob_uri, body)
         prev = json.loads(re.search(r"data-props='(.*?)'", src, re.S).group(1)).get('$preview', {'width': 1080, 'height': 1350})
         W, H = prev['width'], prev['height']
+        css = css_da_peca(src)
         html = f'<!doctype html><html><head><meta charset="utf-8"><style>{"".join(faces)}{css}html,body{{margin:0;width:{W}px;height:{H}px;overflow:hidden}}</style></head><body>{body}</body></html>'
         pg = br.new_page(viewport={'width': W, 'height': H})
         pg.set_content(html)
