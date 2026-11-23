@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """@lucasgiordane · 23/11/2026 · Modelo 3 CURIOSIDADE: "A P&G já tem fábricas que trabalham turnos inteiros sem ninguém dentro".
+Estilo de animação: QUADRINHO (aprovado pelo Lucas em 23/11/2026; teste dos 4 estilos em ferramentas/post-card/estilos-animacao.py).
 Uso: python3 -I gerar.py <saida> <solid26.css> <blobs> <fontes> png|mp4 [páginas, ex.: 1,4]
 Fontes: P&G no dia do investidor (19/11/2026), via New York Times/PYMNTS (22/11/2026) e Tech Times UK (23/11/2026)."""
 import os, sys, base64, glob, subprocess, shutil
@@ -13,7 +14,8 @@ def b64(p): return base64.b64encode(open(p, 'rb').read()).decode()
 faces = []
 for fam, pat, ws in [('Manrope', 'manrope/files/manrope-latin-{w}-normal.woff2', [500, 600, 700, 800]),
                      ('Inter', 'inter/files/inter-latin-{w}-normal.woff2', [400, 500, 600, 700]),
-                     ('IBM Plex Mono', 'ibm-plex-mono/files/ibm-plex-mono-latin-{w}-normal.woff2', [400, 500, 600])]:
+                     ('IBM Plex Mono', 'ibm-plex-mono/files/ibm-plex-mono-latin-{w}-normal.woff2', [400, 500, 600]),
+                     ('Bangers', 'bangers/files/bangers-latin-{w}-normal.woff2', [400])]:
     for w in ws:
         faces.append(f"@font-face{{font-family:'{fam}';font-weight:{w};src:url(data:font/woff2;base64,{b64(os.path.join(FONTES, pat.format(w=w)))}) format('woff2');}}")
 AV = 'data:image/jpeg;base64,' + b64(glob.glob(os.path.join(BLOBS, 'a0000000000000000000000000000004.*'))[0])
@@ -28,105 +30,87 @@ CSS = open(CSSF).read() + """
 .pc .tp{font-size:38px;line-height:1.36;color:#1E2025}
 .pc .tp b{color:#101013}
 .pc .tb{font-size:46px}
-.pc .mi{margin-top:36px;padding:0}
-.fonte{position:absolute;left:26px;bottom:18px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:#A5A8AE}
-/* página 1: fábrica no escuro */
-.night{position:absolute;inset:0;overflow:hidden}
-.moon{position:absolute;right:60px;top:58px;width:70px;height:70px;border-radius:50%;background:#F4F1EA;box-shadow:inset -18px -6px 0 0 #101013}
-.st{position:absolute;width:3px;height:3px;border-radius:50%;background:#F5F5F5;opacity:.5}
-.fab{position:absolute;left:40px;right:40px;bottom:120px;height:250px}
-.fab .bd{position:absolute;left:0;right:0;bottom:0;height:170px;background:#1E2025;border:3px solid #F4F1EA;border-radius:6px 6px 0 0;box-sizing:border-box}
-.fab .sh{position:absolute;bottom:167px;width:150px;height:80px;background:#1E2025;border:3px solid #F4F1EA;border-bottom:0;box-sizing:border-box;clip-path:polygon(0 100%,0 0,100% 100%)}
-.fab .ch{position:absolute;bottom:167px;width:34px;height:110px;background:#1E2025;border:3px solid #F4F1EA;border-bottom:0;box-sizing:border-box}
-.fab .wd{position:absolute;top:36px;width:70px;height:46px;border-radius:4px;background:#2A2D33;border:2px solid #3C4149;box-sizing:border-box}
-.belt{position:absolute;left:0;right:0;bottom:22px;height:14px;background:#3C4149;border-radius:7px}
-.bx{position:absolute;bottom:36px;width:44px;height:38px;background:#DDA94F;border-radius:4px;border:2px solid #101013;box-sizing:border-box}
-.clk{position:absolute;left:40px;top:44px;background:#F4F1EA;color:#101013;border-radius:12px;padding:12px 18px;display:flex;flex-direction:column;gap:2px}
-.clk small{font-family:'IBM Plex Mono',monospace;font-size:17px;color:#3C4149;letter-spacing:.04em}
-.clk b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:40px}
-.zero{position:absolute;left:40px;top:150px;background:#DDA94F;color:#101013;border-radius:10px;padding:10px 16px;font-family:Manrope,sans-serif;font-weight:800;font-size:24px}
-.tagbx{position:absolute;right:26px;bottom:24px;background:#F4F1EA;color:#101013;border-radius:10px;padding:12px 18px;display:flex;flex-direction:column;gap:4px}
-.tagbx b{font-family:Manrope,sans-serif;font-weight:800;font-size:24px}
-.tagbx span{font-family:'IBM Plex Mono',monospace;font-size:17px;color:#3C4149}
-/* página 2: as 24 horas */
-.dia{padding:30px 44px 0;display:flex;flex-direction:column;gap:22px}
-.tn{display:flex;align-items:center;gap:18px}
-.tn .hr{flex:none;width:170px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:26px;color:#F5F5F5}
-.tn .bar{flex:1;height:96px;border-radius:12px;background:#F4F1EA;color:#101013;display:flex;align-items:center;gap:14px;padding:0 22px;box-sizing:border-box;transform-origin:left center}
-.tn .bar b{font-family:Manrope,sans-serif;font-weight:800;font-size:28px}
-.tn .bar span{font-size:22px;color:#3C4149}
-.tn .ppl{display:flex;gap:6px;margin-left:auto}
-.tn .ppl i{width:22px;height:22px;border-radius:50%;background:#101013;display:block}
-.tn.g .bar{background:#DDA94F}
-.tn.g .bar span{color:#101013}
-.nota{margin:30px 44px 0;font-size:25px;line-height:1.38;color:#F5F5F5;background:#2A2416;border:1px solid #A6752D;border-radius:12px;padding:16px 20px}
-.nota b{color:#DDA94F}
-/* página 3: 15 fábricas */
-.grid{padding:40px 44px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:22px 14px}
-.fb{height:56px;border-radius:8px;background:#F4F1EA;position:relative;display:flex;align-items:flex-end;justify-content:center}
-.fb::before{content:'';position:absolute;left:12px;top:-14px;width:28px;height:18px;background:#F4F1EA;clip-path:polygon(0 100%,0 0,100% 100%)}
-.fb::after{content:'';position:absolute;left:42px;top:-14px;width:28px;height:18px;background:#F4F1EA;clip-path:polygon(0 100%,0 0,100% 100%)}
-.fb i{font-style:normal;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;color:#101013;margin-bottom:8px}
-.fb.nx{background:transparent;border:3px dashed #DDA94F;box-sizing:border-box}
+/* caixa de mídia em quadrinho: papel marfim com retícula e contorno grosso */
+.pc .mi{margin-top:36px;padding:0;background:#F4F1EA;background-image:radial-gradient(#D9D2C1 2.2px,transparent 2.4px);background-size:16px 16px;border:6px solid #101013;color:#101013}
+.il-l{color:#3C4149;z-index:6}
+.fonte{position:absolute;left:24px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:#3C4149;z-index:6}
+.bg{font-family:Bangers,cursive;letter-spacing:.03em;font-weight:400}
+.qd{background:#FFFFFF;border:5px solid #101013;border-radius:10px;box-shadow:7px 7px 0 #101013}
+.qd.g{background:#DDA94F}
+.qd.k{background:#1E2025;color:#F5F5F5}
+.qd.r{background:#FFFFFF;border-color:#B91C1C;box-shadow:7px 7px 0 #B91C1C}
+.leg{position:absolute;background:#DDA94F;border:4px solid #101013;padding:10px 16px;font-family:Inter,sans-serif;font-weight:700;font-size:22px;color:#101013;line-height:1.3}
+.bl{position:absolute;background:#FFFFFF;border:5px solid #101013;border-radius:50%;padding:26px 34px;font-family:Bangers,cursive;font-size:42px;letter-spacing:.03em;color:#101013;text-align:center;line-height:1.05}
+.bl::after{content:'';position:absolute;left:70px;bottom:-22px;border:18px solid transparent;border-top:30px solid #101013;border-bottom:0}
+.bum{position:absolute;font-family:Bangers,cursive;color:#DDA94F;-webkit-text-stroke:4px #101013;paint-order:stroke fill;letter-spacing:.04em;white-space:nowrap}
+.zz{position:absolute;font-family:Bangers,cursive;font-size:48px;color:#101013}
+svg.cena{position:absolute;inset:0;width:100%;height:100%}
+svg.cena .ln{stroke:#101013;stroke-width:7;stroke-linejoin:round;stroke-linecap:round}
+/* página 2: tira de 3 quadros */
+.tira{padding:96px 40px 0;display:flex;flex-direction:column;gap:20px}
+.tq{display:flex;align-items:center;gap:20px;padding:16px 22px;transform-origin:left center}
+.tq .hr{flex:none;width:200px;font-family:Bangers,cursive;font-size:40px;letter-spacing:.03em}
+.tq .t{display:flex;flex-direction:column;gap:2px}
+.tq .t b{font-family:Manrope,sans-serif;font-weight:800;font-size:28px}
+.tq .t span{font-size:21px;color:#3C4149}
+.tq.g .t span{color:#101013}
+.tq .ppl{display:flex;gap:8px;margin-left:auto}
+.tq .ppl i{width:26px;height:26px;border-radius:50%;background:#101013;border:3px solid #101013;display:block}
+/* página 3: fábricas */
+.grid{padding:44px 40px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:22px 16px}
+.fb{height:54px;border-radius:6px;background:#1E2025;border:4px solid #101013;position:relative;display:flex;align-items:flex-end;justify-content:center;box-shadow:4px 4px 0 #101013}
+.fb::before,.fb::after{content:'';position:absolute;top:-20px;width:30px;height:18px;background:#101013;clip-path:polygon(0 100%,0 0,100% 100%)}
+.fb::before{left:8px}.fb::after{left:40px}
+.fb i{font-style:normal;font-family:Bangers,cursive;font-size:24px;color:#DDA94F;margin-bottom:4px;letter-spacing:.04em}
+.fb.nx{background:#FFFFFF;border-style:dashed}
 .fb.nx::before,.fb.nx::after{display:none}
-.fb.nx i{color:#DDA94F}
-.trz{padding:26px 44px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.trz div{background:#1E2025;padding:16px;border:2px solid #DDA94F;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
-.trz small{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:#DDA94F;letter-spacing:.06em}
-.trz b{font-family:Manrope,sans-serif;font-weight:800;font-size:25px;color:#F5F5F5;line-height:1.2}
-/* página 4: a IA antes do turno */
-.flx{padding:30px 40px 0;display:flex;align-items:stretch;gap:0}
-.st4{flex:1;background:#F4F1EA;color:#101013;border-radius:12px;padding:16px 14px;display:flex;flex-direction:column;gap:6px;text-align:center}
-.st4 small{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:#A6752D}
-.st4 b{font-family:Manrope,sans-serif;font-weight:800;font-size:24px;line-height:1.2}
-.st4.g{background:#DDA94F}
-.st4.g small{color:#101013}
-.arw{flex:none;width:44px;display:flex;align-items:center;justify-content:center;color:#DDA94F;font-size:36px;font-weight:700}
-.cmp{padding:34px 40px 0;display:flex;flex-direction:column;gap:26px}
-.cp .lb{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
-.cp .lb span{font-size:25px;color:#F5F5F5}
-.cp .lb b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:38px;color:#F4F1EA}
-.cp .tr{height:58px;border-radius:10px;background:#2A2D33;overflow:hidden}
-.cp .tr i{display:block;height:100%;border-radius:10px;background:#F4F1EA;transform-origin:left center}
-.cp.g .lb b{color:#DDA94F}
-.cp.g .tr i{background:#DDA94F}
+.fb.nx i{color:#101013}
+.trz{padding:30px 40px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.trz div{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.trz small{font-family:Bangers,cursive;font-size:26px;letter-spacing:.05em;color:#A6752D}
+.trz b{font-family:Manrope,sans-serif;font-weight:800;font-size:24px;line-height:1.2}
+/* página 4: fluxo + comparação */
+.flx{padding:46px 34px 0;display:flex;align-items:stretch}
+.st4{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:6px;text-align:center}
+.st4 small{font-family:Bangers,cursive;font-size:26px;letter-spacing:.05em}
+.st4 b{font-family:Manrope,sans-serif;font-weight:800;font-size:22px;line-height:1.2}
+.arw{flex:none;width:46px;display:flex;align-items:center;justify-content:center;font-family:Bangers,cursive;font-size:48px}
+.cmp{padding:40px 40px 0;display:flex;flex-direction:column;gap:22px}
+.cp .lb{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.cp .lb span{font-family:Bangers,cursive;font-size:32px;letter-spacing:.04em}
+.cp .lb b{font-family:Bangers,cursive;font-size:50px;letter-spacing:.04em}
+.cp .tr{height:52px;border:5px solid #101013;border-radius:8px;background:#FFFFFF;overflow:hidden}
+.cp .tr i{display:block;height:100%;background:#3C4149;transform-origin:left center}
+.cp.g .tr i{background:#DDA94F;border-right:5px solid #101013}
 /* página 5: metas */
-.mt{padding:44px 40px 0;display:flex;flex-direction:column;gap:16px}
-.mt div{display:flex;align-items:center;gap:22px;background:#F4F1EA;color:#101013;border-radius:12px;padding:18px 22px}
-.mt b{flex:none;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:36px;min-width:290px}
-.mt span{font-size:23px;line-height:1.3;color:#1E2025}
-.mt div.rd{border-left:10px solid #EF4444}
-.mt div.rd b{color:#B91C1C}
-.selo{position:absolute;top:20px;left:26px;background:#DDA94F;color:#101013;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;letter-spacing:.08em;border-radius:4px;padding:4px 10px;z-index:5}
-.fab .bd{overflow:hidden}
-@keyframes esteira{from{transform:translateX(0)}to{transform:translateX(980px)}}
-@keyframes rise2{from{opacity:0;transform:translateY(120px)}to{opacity:1;transform:none}}
-/* página 6: CTA (mesmo padrão do teste animado de 21/11) */
-.ctaw{padding:36px 40px 0}
-.kw{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px}
-.kwl{font-family:Inter,sans-serif;font-weight:600;font-size:22px;letter-spacing:.24em;color:#A5A8AE;text-transform:uppercase}
-.tw{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:72px;color:#DDA94F;letter-spacing:.02em;white-space:nowrap;overflow:hidden;border-right:5px solid #DDA94F;animation:type 1.1s .7s steps(11) both, caret .6s 1.8s 3 both}
-@keyframes type{from{width:0}to{width:11.6ch}}
-@keyframes caret{50%{border-color:transparent}}
-.cm{margin-top:22px;display:flex;align-items:center;gap:16px;background:#1E2025;border:1px solid #3C4149;border-radius:14px;padding:14px 18px}
-.cm img{width:52px;height:52px;border-radius:50%;object-fit:cover}
-.cm div{display:flex;flex-direction:column;gap:2px;flex:1}
-.cm b{font-family:Inter,sans-serif;font-weight:600;font-size:19px;color:#A5A8AE}
-.cm span{font-size:24px;color:#F5F5F5}
-.cm .ty{font-family:'IBM Plex Mono',monospace;font-weight:600;color:#DDA94F;font-size:28px}
-.cm em{font-style:normal;color:#EF4444;font-size:28px}
-.cm.me{margin-top:12px;margin-left:60px}
-.cm .avg{flex:none;width:52px;height:52px;border-radius:50%;background:#3C4149;display:block}
-.dm{margin-top:14px;margin-left:60px;background:#2A2416;border:1px solid #A6752D;border-radius:14px 14px 4px 14px;padding:14px 18px;display:flex;flex-direction:column;gap:4px}
-.dm small{font-family:'IBM Plex Mono',monospace;font-size:15px;color:#DDA94F}
-.dm span{font-size:23px;color:#F5F5F5;line-height:1.35}
+.mt{padding:66px 40px 0;display:flex;flex-direction:column;gap:20px}
+.mt div{display:flex;align-items:center;gap:20px;padding:14px 20px}
+.mt b{flex:none;font-family:Bangers,cursive;font-size:50px;letter-spacing:.03em;min-width:270px}
+.mt span{font-size:23px;line-height:1.3;font-weight:600}
+.mt div.r b{color:#B91C1C}
+.selo{position:absolute;top:18px;left:22px;background:#DDA94F;border:4px solid #101013;font-family:Bangers,cursive;font-size:28px;letter-spacing:.08em;padding:2px 14px;z-index:6;transform:rotate(-4deg)}
+/* página 6: CTA em balões */
+.ctaw{position:absolute;inset:0}
+.kw{position:absolute;left:0;right:0;top:34px;display:flex;flex-direction:column;align-items:center;gap:0}
+.kwl{font-family:Bangers,cursive;font-size:34px;letter-spacing:.12em}
+.tw{font-family:Bangers,cursive;font-size:104px;letter-spacing:.04em;color:#DDA94F;-webkit-text-stroke:5px #101013;paint-order:stroke fill;white-space:nowrap;overflow:hidden;animation:type 1.1s .7s steps(11) both}
+@keyframes type{from{width:0}to{width:6.2em}}
+.cb{position:absolute;padding:14px 20px;display:flex;align-items:center;gap:14px}
+.cb img,.cb .avg{flex:none;width:54px;height:54px;border-radius:50%;object-fit:cover;border:3px solid #101013;background:#A5A8AE;box-sizing:border-box}
+.cb div{display:flex;flex-direction:column;gap:2px}
+.cb small{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:#3C4149}
+.cb span{font-size:24px;font-weight:600;line-height:1.3}
+.cb .ty{font-family:Bangers,cursive;font-size:36px;letter-spacing:.04em;color:#A6752D;font-weight:400}
 /* animações */
-@keyframes inL{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:none}}
-@keyframes inR{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
-@keyframes inUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
+@keyframes inR{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+@keyframes inUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}70%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes popr{0%{opacity:0;transform:scale(.4) rotate(-12deg)}70%{opacity:1;transform:scale(1.15) rotate(4deg)}100%{opacity:1;transform:scale(1) rotate(-4deg)}}
+@keyframes shake{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(3deg) scale(1.06)}}
+@keyframes esteira{from{transform:translateX(0)}to{transform:translateX(840px)}}
 """
 def A(name, dur, delay, ease='cubic-bezier(.2,.8,.2,1)'):
     return f'style="animation:{name} {dur}s {delay}s both {ease}"'
@@ -141,64 +125,67 @@ def page(pg, tag, texto, media, rodape):
 </div>'''
 TP = lambda x: f'<p class="tp">{x}</p>'
 TB = lambda x: f'<p class="tb">{x}</p>'
-IL = '<span class="il-l" style="z-index:5">ILUSTRAÇÃO</span>'
+IL = '<span class="il-l">ILUSTRAÇÃO</span>'
 def FT(t='P&G (dia do investidor, 19/11), via NYT/PYMNTS · 22/11/2026'):
-    return f'<span class="fonte" style="z-index:5">Fonte: {t}</span>'
-EST = [(6, 12), (18, 30), (31, 8), (44, 22), (57, 14), (70, 6), (83, 30), (93, 16), (12, 40), (38, 36), (64, 34), (50, 4)]
-def stars():
-    return ''.join(f'<i class="st" style="left:{x}%;top:{y}%"></i>' for x, y in EST)
+    return f'<span class="fonte">Fonte: {t}</span>'
+def burst(txt, x, y, size, delay, rot=-4):
+    return f'<div class="bum" style="left:{x}px;top:{y}px;font-size:{size}px;animation:popr .45s {delay}s both, shake .5s {delay + .5:.2f}s 3 both">{txt}</div>'
 
 PAGS = []
-# 1 · capa: a fábrica de madrugada, luzes apagadas, a esteira andando sozinha
-janelas = ''.join(f'<span class="wd" style="left:{40 + 100 * k}px"></span>' for k in range(8))
-caixas = ''.join(f'<span class="bx" style="left:-60px;animation:esteira 5.2s {round(-k * 0.87, 2)}s infinite linear"></span>' for k in range(6))
-fab = (f'<div class="fab" {A("rise2", 1.0, .2)}>'
-       '<span class="sh" style="left:30px"></span><span class="sh" style="left:180px"></span><span class="sh" style="left:330px"></span>'
-       '<span class="ch" style="right:120px;height:120px"></span><span class="ch" style="right:60px;height:90px"></span>'
-       f'<div class="bd">{janelas}<span class="belt"></span>{caixas}</div></div>')
-cena1 = (f'<div class="night">{stars()}<span class="moon" {A("fade", .8, .1)}></span>{fab}'
-         f'<div class="clk" {A("inL", .5, 1.2)}><small>exemplo de turno</small><b class="hora">22:00 → 06:00</b></div>'
-         f'<div class="zero" {A("pop", .5, 2.2)}>0 pessoas na linha</div>'
-         f'<div class="tagbx" {A("inUp", .6, 3.2)}><b>+15 fábricas</b><span>P&amp;G · nov/2026</span></div></div>')
+# 1 · capa: a fábrica em quadrinho, a esteira andando sozinha, balão e CLANK
+TELHADO = 'M60 360 L60 270 L210 360 Z M210 360 L210 270 L360 360 Z M360 360 L360 270 L510 360 Z'
+JANELAS = [(100 + 92 * k, 390, 62, 44) for k in range(8)]
+caixas = ''.join(f'<rect x="70" y="494" width="44" height="38" fill="#DDA94F" stroke="#101013" stroke-width="5" style="animation:esteira 4.6s {-k * .92:.2f}s infinite linear"/>' for k in range(5))
+fab = (f'<svg class="cena" viewBox="0 0 908 672" style="animation:pop .6s .2s both;transform-origin:50% 70%"><clipPath id="cl"><rect x="64" y="364" width="792" height="212"/></clipPath>'
+       f'<path class="ln" d="{TELHADO}" fill="#3C4149"/>'
+       '<path class="ln" d="M690 360 L690 240 L726 240 L726 360 Z M760 360 L760 280 L796 280 L796 360 Z" fill="#1E2025"/>'
+       '<path class="ln" d="M60 360 L860 360 L860 580 L60 580 Z" fill="#1E2025"/>'
+       + ''.join(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#101013" stroke="#F4F1EA" stroke-width="3"/>' for x, y, w, h in JANELAS)
+       + f'<line x1="90" y1="540" x2="830" y2="540" stroke="#A5A8AE" stroke-width="10" stroke-linecap="round"/><g clip-path="url(#cl)">{caixas}</g></svg>')
+cena1 = (fab + f'<div class="bl" style="left:36px;top:36px;animation:pop .5s 1.4s both">22H ÀS 6H (EXEMPLO):<br>0 PESSOAS NA LINHA!</div>'
+         + burst('CLANK!', 650, 180, 84, 2.6)
+         + f'<div class="zz" style="left:560px;top:100px;animation:fade .4s 3.4s both, shake .9s 3.8s 3">Z z z</div>')
 PAGS.append((6.0, page('1/6', 'CURIOSIDADE', TB('A P&amp;G já tem fábricas que trabalham <em>turnos inteiros sem ninguém dentro.</em>') + TP('A dona de Gillette, Pampers e Ariel contou o plano aos investidores. Te conto ↓'),
                        IL + cena1, 'Arraste →')))
-# 2 · o que é um "turno no escuro"
-tns = [('06h–14h', '', 'Turno da manhã', 'gente na linha', 3),
-       ('14h–22h', '', 'Turno da tarde', 'gente na linha', 3),
-       ('horas seguidas', 'g', 'Turno sem gente', 'só as máquinas', 0)]
+# 2 · tira de 3 quadros: manhã, tarde, turno sem gente
 def ppl(n): return '<span class="ppl">' + '<i></i>' * n + '</span>' if n else ''
-dia = ''.join(f'<div class="tn {c}" {A("fade", .3, .4 + 1.0 * i)}><span class="hr">{h}</span><div class="bar" style="animation:grow .7s {.5 + 1.0 * i}s both cubic-bezier(.2,.8,.2,1)"><b>{t}</b><span>{s}</span>{ppl(n)}</div></div>' for i, (h, c, t, s, n) in enumerate(tns))
+tns = [('06H–14H', '', 'Turno da manhã', 'gente na linha', 3),
+       ('14H–22H', '', 'Turno da tarde', 'gente na linha', 3),
+       ('HORAS SEGUIDAS', 'g', 'Turno sem gente', 'só as máquinas', 0)]
+tira = ''.join(f'<div class="tq qd {c}" {A("inL", .5, .4 + 1.0 * i)}><span class="hr">{h}</span><div class="t"><b>{t}</b><span>{s}</span></div>{ppl(n)}</div>' for i, (h, c, t, s, n) in enumerate(tns))
 PAGS.append((6.0, page('2/6', None, TB('1. O que é um <em>"turno no escuro".</em>') + TP('As linhas de produção rodam <b>horas seguidas sem nenhuma pessoa mexendo</b>. O New York Times chama de "dark shift".'),
-                       IL + f'<div class="dia">{dia}</div><p class="nota" {A("inUp", .6, 3.6)}>As pessoas não somem da fábrica: <b>elas param de ficar presas à máquina.</b></p>' + FT(), 'Arraste →')))
+                       IL + f'<div class="tira">{tira}</div>' + burst('VRRRUM!', 330, 14, 56, 2.9)
+                       + f'<div class="leg" style="left:40px;right:40px;bottom:58px;animation:inUp .6s 3.6s both">As pessoas não somem da fábrica: elas param de ficar presas à máquina.</div>' + FT(), 'Arraste →')))
 # 3 · mais de 15 fábricas + robôs fora da linha
-fbs = ''.join(f'<div class="fb" {A("pop", .35, .4 + .14 * k)}><i>{k + 1:02d}</i></div>' for k in range(15))
-fbs += f'<div class="fb nx" {A("pop", .4, 2.7)}><i>+2027</i></div>'
+fbs = ''.join(f'<div class="fb" {A("pop", .35, .4 + .13 * k)}><i>{k + 1:02d}</i></div>' for k in range(15))
+fbs += f'<div class="fb nx" {A("pop", .4, 2.5)}><i>+2027</i></div>'
 trio = [('DOCAS', 'Robôs carregando'), ('ARMAZÉNS', 'Robôs movendo estoque'), ('ESTRADA', 'Caminhão autônomo em teste')]
-tr = ''.join(f'<div {A("inUp", .5, 3.3 + .5 * i)}><small>{a}</small><b>{b}</b></div>' for i, (a, b) in enumerate(trio))
+tr = ''.join(f'<div class="qd" {A("inUp", .5, 3.2 + .5 * i)}><small>{a}</small><b>{b}</b></div>' for i, (a, b) in enumerate(trio))
 PAGS.append((6.0, page('3/6', None, TB('2. Já são <em>mais de 15 fábricas</em> no mundo.') + TP('E a P&amp;G quer mais no ano fiscal de 2027. A automação já saiu da linha e chegou nas docas, no estoque e na estrada.'),
-                       IL + f'<div class="grid">{fbs}</div><div class="trz">{tr}</div>' + FT(), 'Arraste →')))
+                       IL + f'<div class="grid">{fbs}</div><div class="trz">{tr}</div>' + burst('15+!', 250, 392, 72, 2.8) + FT(), 'Arraste →')))
 # 4 · a IA prepara o turno
 fl = [('', 'DADOS', 'Produção do dia'), ('g', 'IA', 'Analisa tudo'), ('', 'EQUIPE', 'Chega com o plano')]
 flx = ''
 for i, (c, a, b) in enumerate(fl):
-    if i: flx += f'<span class="arw" {A("fade", .3, .6 + .9 * i - .3)}>→</span>'
-    flx += f'<div class="st4 {c}" {A("pop", .5, .6 + .9 * i)}><small>{a}</small><b>{b}</b></div>'
-cmp = (f'<div class="cmp"><div class="cp" {A("fade", .3, 3.2)}><div class="lb"><span>Antes</span><b>horas</b></div><div class="tr"><i style="width:100%;animation:grow .8s 3.4s both"></i></div></div>'
-       f'<div class="cp g" {A("fade", .3, 4.3)}><div class="lb"><span>Com a IA</span><b>5 min</b></div><div class="tr"><i style="width:6%;animation:grow .4s 4.5s both"></i></div></div></div>')
+    if i: flx += f'<span class="arw" {A("fade", .3, .3 + .9 * i)}>➜</span>'
+    flx += f'<div class="st4 qd {c}" {A("pop", .5, .6 + .9 * i)}><small>{a}</small><b>{b}</b></div>'
+cmp = (f'<div class="cmp"><div class="cp" {A("fade", .3, 3.2)}><div class="lb"><span>ANTES</span><b>HORAS</b></div><div class="tr"><i style="width:100%;animation:grow .8s 3.4s both"></i></div></div>'
+       f'<div class="cp g" {A("fade", .3, 4.3)}><div class="lb"><span>COM A IA</span><b style="color:#A6752D">5 MIN</b></div><div class="tr"><i style="width:7%;animation:grow .4s 4.5s both"></i></div></div></div>')
 PAGS.append((6.5, page('4/6', None, TB('3. A IA <em>prepara o turno</em> antes de ele começar.') + TP('Na fábrica de Mechelen, na Bélgica, a IA lê os dados de produção antes de cada turno. Segundo a P&amp;G, uma tarefa de horas caiu para 5 minutos.'),
-                       f'<div class="flx">{flx}</div>{cmp}' + FT('Luc Reynaert, P&G, via Tech Times · 23/11/2026'), 'Arraste →')))
+                       f'<div class="flx">{flx}</div>{cmp}' + burst('ZAP!', 400, 452, 60, 4.9) + FT('Luc Reynaert, P&G, via Tech Times · 23/11/2026'), 'Arraste →')))
 # 5 · as metas (e o lado das pessoas)
-mts = [('', 'até US$ 10 bi', 'de economia, entre 2027 e 2030'),
-       ('', 'até 20%', 'mais produtividade nas fábricas'),
-       ('rd', '20% a 30%', 'menos gente em suprimentos até 2030, terceirizados incluídos')]
-mt = ''.join(f'<div class="{c}" {A("inL", .55, .7 + 1.0 * i)}><b>{a}</b><span>{b}</span></div>' for i, (c, a, b) in enumerate(mts))
+mts = [('', 'ATÉ US$ 10 BI', 'de economia, entre 2027 e 2030'),
+       ('', 'ATÉ 20%', 'mais produtividade nas fábricas'),
+       ('r', '20% A 30%', 'menos gente em suprimentos até 2030, terceirizados incluídos')]
+mt = ''.join(f'<div class="qd {c}" {A("inL", .55, .7 + 1.0 * i)}><b>{a}</b><span>{b}</span></div>' for i, (c, a, b) in enumerate(mts))
 PAGS.append((6.0, page('5/6', None, TB('4. O plano: <em>muito dinheiro e menos gente.</em>') + TP('Tudo isso é meta, não resultado. E inclui um corte grande na equipe que cuida da produção e da entrega.'),
-                       '<span class="selo">META</span>' + f'<div class="mt">{mt}</div>' + FT('P&G via Tech Times (23/11) e PYMNTS (22/11)'), 'Arraste: falta uma pergunta →')))
-# 6 · CTA
-cm = (f'<div class="ctaw"><div class="kw" {A("pop", .6, .4)}><span class="kwl">comente</span><b class="tw">DIAGNÓSTICO</b></div>'
-      f'<div class="cm" {A("inUp", .6, 2.0)}><i class="avg"></i><div><b>seguidor</b><span class="ty">DIAGNÓSTICO</span></div><em {A("pop", .4, 2.6)}>♥</em></div>'
-      f'<div class="cm me" {A("inUp", .6, 3.1)}><img src="{AV}" alt=""><div><b>lucasgiordane</b><span>Te chamei no direct! 📩</span></div></div>'
-      f'<div class="dm" {A("inUp", .6, 4.2)}><small>direct · lucasgiordane</small><span>Oi! Me conta: qual é o seu negócio e o que mais trava hoje?</span></div></div>')
+                       f'<span class="selo" {A("popr", .45, .2)}>META</span>' + f'<div class="mt">{mt}</div>' + FT('P&G via Tech Times (23/11) e PYMNTS (22/11)'), 'Arraste: falta uma pergunta →')))
+# 6 · CTA em balões
+cm = (f'<div class="ctaw"><div class="kw" {A("pop", .6, .3)}><span class="kwl">COMENTE</span><b class="tw">DIAGNÓSTICO</b></div>'
+      f'<div class="cb qd" style="left:40px;right:120px;top:250px;animation:inL .5s 2.0s both"><i class="avg"></i><div><small>seguidor</small><span class="ty">DIAGNÓSTICO!</span></div></div>'
+      f'<div class="cb qd g" style="left:120px;right:40px;top:378px;animation:inR .5s 3.0s both"><img src="{AV}" alt=""><div><small style="color:#101013">lucasgiordane</small><span>Te chamei no direct! 📩</span></div></div>'
+      f'<div class="cb qd" style="left:40px;right:40px;top:506px;animation:inUp .5s 4.0s both"><div><small>direct · lucasgiordane</small><span>Oi! Me conta: qual é o seu negócio e o que mais trava hoje?</span></div></div>'
+      '</div>')
 PAGS.append((7.0, page('6/6', 'SUA VEZ', TB('Que tarefa da sua empresa <em>podia rodar sozinha de madrugada?</em>') + TP('O orçamento, a cobrança, o relatório do dia. <b>Comenta DIAGNÓSTICO</b> que eu te chamo no direct. E salva para não perder.'),
                        cm, 'Comenta DIAGNÓSTICO ↓')))
 
