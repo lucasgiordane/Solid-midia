@@ -177,7 +177,9 @@ with sync_playwright() as pw:
             continue
         fr = os.path.join(OUT, f'f-{nome}'); shutil.rmtree(fr, ignore_errors=True); os.makedirs(fr)
         for f in range(int(FPS * DUR)):
-            pg.evaluate(f'document.getAnimations().forEach(a => {{ a.pause(); a.currentTime = {f * 1000 / FPS}; }})')
+            # capa: o primeiro quadro é a página pronta (capa no perfil do Instagram)
+            t = DUR * 1000 - 1 if f == 0 else f * 1000 / FPS
+            pg.evaluate(f'document.getAnimations().forEach(a => {{ a.pause(); a.currentTime = {t}; }})')
             pg.screenshot(path=os.path.join(fr, f'{f:04d}.png'))
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fr, '%04d.png'),
                         '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-movflags', '+faststart', os.path.join(OUT, f'estilo-{nome}.mp4')], check=True)

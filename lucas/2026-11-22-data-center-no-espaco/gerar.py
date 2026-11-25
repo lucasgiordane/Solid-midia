@@ -200,7 +200,9 @@ with sync_playwright() as pw:
         fr = os.path.join(OUT, f'f{i}'); shutil.rmtree(fr, ignore_errors=True); os.makedirs(fr)
         n = int(FPS * dur)
         for f in range(n):
-            pgw.evaluate(f'document.getAnimations().forEach(a => {{ a.pause(); a.currentTime = {f * 1000 / FPS}; }})')
+            # capa: na página 1 o primeiro quadro é a página pronta, para o Instagram usar como capa no perfil
+            t = dur * 1000 - 1 if (i == 1 and f == 0) else f * 1000 / FPS
+            pgw.evaluate(f'document.getAnimations().forEach(a => {{ a.pause(); a.currentTime = {t}; }})')
             pgw.screenshot(path=os.path.join(fr, f'{f:04d}.png'))
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fr, '%04d.png'),
                         '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-movflags', '+faststart', os.path.join(OUT, f'slide-{i:02d}.mp4')], check=True)

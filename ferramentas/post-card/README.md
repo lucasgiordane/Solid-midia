@@ -7,4 +7,6 @@
 Uso: `python3 -I <script> <saida> solid26.css <pasta-blobs> ~/fontes/node_modules/@fontsource`
 A pasta de blobs precisa ter `a0000000000000000000000000000004.jpg` (copie `lucas-avatar.jpg`: recorte do Retrato Corporativo, enquadramento igual ao perfil do Instagram) e `a0000000000000000000000000000001.svg` (copie `simbolo-dourado.svg`).
 Fontes: `npm install @fontsource/manrope @fontsource/inter @fontsource/ibm-plex-mono`.
+**Capa do vídeo (decisão do Lucas em 25/11/2026):** no MP4 da página 1, o primeiro quadro é a página pronta (todos os elementos no lugar) e só depois a animação começa. O Instagram usa o primeiro quadro como capa no perfil; sem isso a caixa aparece vazia no grid. Todos os geradores já fazem isso; mantenha em geradores novos.
+
 Guia completo: `claude/modelos-post-card-lucas.md` no projeto Solid Business.
