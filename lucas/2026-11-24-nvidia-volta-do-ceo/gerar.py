@@ -23,11 +23,12 @@ CSS = open(CSSF).read() + """
 .pc .nm b{font-size:44px;letter-spacing:-0.01em}
 .pc .nm span{font-size:32px;color:#5B6070}
 .pc .pg{top:110px}
-.pc .tx{margin-top:36px;gap:22px}
+.pc .tx{margin-top:24px;gap:22px;flex:1;justify-content:center}
 .pc .tp{font-size:36px;line-height:1.36;color:#1E2025}
 .pc .tp b{color:#101013}
 .pc .tb{font-size:46px}
-.pc .mi{margin-top:34px;padding:0}
+/* caixa do vídeo com o mesmo tamanho e a mesma posição em todas as páginas (decisão do Lucas em 25/11/2026) */
+.pc .mi{flex:none;height:660px;min-height:0;margin-top:24px;padding:0}
 .fonte{position:absolute;left:26px;bottom:18px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:#A5A8AE}
 .il-l{position:absolute;right:20px;top:18px;font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.12em;color:#101013;background:#DDA94F;border-radius:4px;padding:4px 10px}
 .wrap{position:absolute;inset:0;padding:44px 44px 56px;display:flex;flex-direction:column;justify-content:center;gap:22px}
@@ -71,12 +72,13 @@ CSS = open(CSSF).read() + """
 .card b{font-family:Manrope,sans-serif;font-weight:800;font-size:26px;line-height:1.22}
 .card span{font-size:19px;color:#3C4149;line-height:1.3}
 /* checklist do seu negócio */
-.q{display:flex;gap:18px;align-items:center;background:#F4F1EA;color:#101013;border-radius:12px;padding:16px 20px}
+.q{display:flex;gap:18px;align-items:center;background:#F4F1EA;color:#101013;border-radius:12px;padding:15px 20px}
 .q .bx i{font-style:normal}
 .q .bx{flex:none;width:44px;height:44px;border-radius:8px;border:4px solid #101013;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;font-size:30px;color:#EF4444;line-height:1}
-.q b{font-family:Manrope,sans-serif;font-weight:800;font-size:27px;line-height:1.25}
+.q b{display:block;font-family:Manrope,sans-serif;font-weight:800;font-size:26px;line-height:1.22}
+.q div{line-height:1.2}
 .q span{display:block;font-size:19px;color:#3C4149;margin-top:2px}
-.cap{font-size:25px;line-height:1.35;color:#F5F5F5;background:#2A2416;border:1px solid #A6752D;border-radius:12px;padding:16px 20px}
+.cap{font-size:24px;line-height:1.32;color:#F5F5F5;background:#2A2416;border:1px solid #A6752D;border-radius:12px;padding:16px 20px}
 .cap b{color:#DDA94F}
 /* CTA */
 .ctaw{padding:36px 40px 0}
@@ -160,7 +162,7 @@ qs = [('Quem aprova os pagamentos?', 'Se só você aprova, o caixa para.'),
       ('Quem decide o preço?', 'Se está só na sua cabeça, cada um cobra um valor.')]
 ql = ''.join(f'<div class="q" {A("inL", .5, .5 + .8 * i)}><span class="bx"><i {A("pop", .3, .9 + .8 * i)}>?</i></span><div><b>{a}</b><span>{b}</span></div></div>' for i, (a, b) in enumerate(qs))
 PAGS.append((6.5, page('5/6', None, TB('4. A lição serve <em>para qualquer empresa.</em>') + TP('Quando tudo depende de uma pessoa, a empresa inteira balança junto. Faz o teste:'),
-                       IL + f'<div class="wrap" style="padding-top:62px;gap:16px">{ql}<p class="cap" {A("inUp", .5, 4.2)}>Se você sumisse 11 dias, <b>quantas dessas teriam resposta?</b></p></div>', 'Arraste: falta uma pergunta →')))
+                       IL + f'<div class="wrap" style="padding:58px 44px 52px;gap:14px">{ql}<p class="cap" {A("inUp", .5, 4.2)}>Se você sumisse 11 dias, <b>quantas dessas teriam resposta?</b></p></div>', 'Arraste: falta uma pergunta →')))
 # 6 · CTA
 cm = (f'<div class="ctaw"><div class="kw" {A("pop", .6, .4)}><span class="kwl">comente</span><b class="tw">DIAGNÓSTICO</b></div>'
       f'<div class="cm" {A("inUp", .6, 2.0)}><i class="avg"></i><div><b>seguidor</b><span class="ty">DIAGNÓSTICO</span></div><em {A("pop", .4, 2.6)}>♥</em></div>'
@@ -176,6 +178,9 @@ with sync_playwright() as pw:
         if SO and i not in SO: continue
         pgw.set_content(f'<!doctype html><html><head><meta charset="utf-8"><style>{"".join(faces)}{CSS}html,body{{margin:0;width:1080px;height:1350px;overflow:hidden}}</style></head><body>{body}</body></html>')
         pgw.evaluate('document.fonts.ready')
+        if MODO == 'medir':
+            print(i, pgw.evaluate("[document.querySelector('.mi').offsetHeight, Math.round(document.querySelector('.tx').getBoundingClientRect().bottom)]"))
+            continue
         if MODO == 'png':
             pgw.evaluate(f'document.getAnimations().forEach(a => {{ a.pause(); a.currentTime = {dur * 1000 - 1}; }})')
             pgw.screenshot(path=os.path.join(OUT, f'slide-{i:02d}.png'))

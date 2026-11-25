@@ -173,3 +173,7 @@ body{margin:0}
 .grid4 div span{font-family:Manrope,sans-serif;font-weight:700;font-size:27px;color:#F5F5F5;line-height:1.25}
 .line{position:relative;height:300px}
 .line svg{width:100%;height:100%}
+/* post-card: caixa do vídeo com o mesmo tamanho e a mesma posição em todas as páginas (decisão do Lucas em 25/11/2026).
+   O texto de cima ocupa o espaço que sobra e fica centralizado nele; o texto precisa caber acima da caixa. */
+.pc .tx{flex:1;justify-content:center}
+.pc .mi{flex:none;height:660px;min-height:0}
