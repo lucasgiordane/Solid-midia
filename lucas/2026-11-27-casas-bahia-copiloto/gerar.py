@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """@lucasgiordane · 27/11/2026 · Modelo 2 NA PRÁTICA: "Casas Bahia: o copiloto de IA dos vendedores (Bah.IA)".
 Pedido do Lucas: usar vários estilos de animação da referência @yleintech ("10 Claude Animation styles"), um por página:
+  v3 (27/11): padrão único neon em todas as páginas (o Lucas achou estranho um estilo por página).
   v2 (27/11): cada estilo com paleta própria dentro da caixa e animação fora do padrão (pedido do Lucas).
   1 Quadrinho (Comic Art) · 2 Flat Vector · 3 Traço neon (Glow Sketch) · 4 Pixel Art · 5 Quadro de giz (Chalkboard) · 6 CTA padrão.
 Uso: python3 -I gerar.py <saida> <solid26.css> <blobs> <fontes> png|mp4|medir [páginas, ex.: 1,4]
@@ -113,7 +114,7 @@ svg.sv{position:absolute;inset:0;width:100%;height:100%}
 /* ---------- 3 · TRAÇO NEON (synthwave) ---------- */
 .glow{background:linear-gradient(#0D0221 0%,#1A0638 62%,#2D0B57 100%);overflow:hidden}
 .glow .floor{position:absolute;left:-200px;right:-200px;bottom:-40px;height:260px;transform:perspective(320px) rotateX(58deg);transform-origin:bottom center;background-image:linear-gradient(#FF2BD6 2px,transparent 2px),linear-gradient(90deg,#FF2BD6 2px,transparent 2px);background-size:60px 60px;opacity:.45;animation:gridmove 1.2s linear infinite}
-.glow .sun{position:absolute;left:50%;top:300px;width:300px;height:300px;margin-left:-150px;border-radius:50%;background:linear-gradient(#FFE600,#FF2BD6);opacity:.22;filter:blur(2px)}
+.glow .sun{position:absolute;left:50%;top:300px;width:300px;height:300px;margin-left:-150px;border-radius:50%;background:linear-gradient(#FFE600,#FF2BD6);opacity:.10;filter:blur(6px)}
 .glow .ph{fill:#0D0221;fill-opacity:.85;stroke:#00F0FF;stroke-width:5;stroke-linejoin:round;filter:drop-shadow(0 0 8px #00F0FF) drop-shadow(0 0 22px rgba(0,240,255,.6))}
 .glow .cd{fill:none;stroke-width:4;filter:drop-shadow(0 0 8px currentColor)}
 .glow .gt{position:absolute;font-family:Manrope,sans-serif;font-weight:800;color:#FFFFFF}
@@ -151,6 +152,21 @@ svg.sv{position:absolute;inset:0;width:100%;height:100%}
 .giz .du{position:absolute;width:6px;height:6px;border-radius:50%;background:#FFFFFF}
 .giz .sty{color:#D8E8DA;right:34px;bottom:28px}
 .giz .il-l{background:#FFE066;color:#101013;right:34px;top:32px}
+
+/* v3: padrão único neon em todas as páginas */
+.glow .pk{position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;margin:-9px 0 0 -9px}
+.glow .nbar{position:absolute;width:260px;height:20px;border-radius:10px;background:rgba(255,255,255,.12);overflow:hidden}
+.glow .nbar i{display:block;height:100%;border-radius:10px}
+.glow .ph{fill:#0D0221;fill-opacity:.85;stroke:#00F0FF;stroke-width:5;stroke-linejoin:round;filter:drop-shadow(0 0 8px #00F0FF) drop-shadow(0 0 22px rgba(0,240,255,.6))}
+.ctan{position:relative;z-index:2;padding-top:60px}
+.ctan .tw{color:#FFE600;border-right-color:#FFE600;text-shadow:0 0 12px #FFE600}
+.ctan .kwl{color:#00F0FF;text-shadow:0 0 10px #00F0FF}
+.ctan .cm{background:rgba(13,2,33,.85);border:2px solid #00F0FF;box-shadow:0 0 14px rgba(0,240,255,.45)}
+.ctan .cm .ty{color:#FFE600;text-shadow:0 0 10px #FFE600}
+.ctan .cm b{color:#C9C1E8}
+.ctan .cm em{color:#FF2BD6;text-shadow:0 0 10px #FF2BD6}
+.ctan .dm{background:rgba(13,2,33,.88);border:2px solid #FF2BD6;box-shadow:0 0 14px rgba(255,43,214,.45)}
+.ctan .dm small{color:#FF2BD6}
 /* ---------- 6 · CTA ---------- */
 .ctaw{padding:36px 40px 0}
 .kw{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px}
@@ -191,64 +207,66 @@ def path(d, cls, delay, dur, L=2400):
     return f'<path class="{cls}" d="{d}" style="--L:{L};stroke-dasharray:{L};animation:draw {dur}s {delay}s both ease-in-out"/>'
 PAGS = []
 
-# ---------- 1 · capa em QUADRINHO pop art: cliente, vendedor, a IA "sopra" a venda ----------
-def pessoa(x, y, cor, s=1.0):
-    # boneco simples de HQ: cabeça, corpo, contorno grosso
-    return (f'<g transform="translate({x} {y}) scale({s})">'
-            f'<path d="M-60 210 C-60 120,60 120,60 210 Z" fill="{cor}" stroke="#101013" stroke-width="7" stroke-linejoin="round"/>'
-            f'<circle cx="0" cy="62" r="52" fill="#FFE8D1" stroke="#101013" stroke-width="7"/>'
-            f'<circle cx="-18" cy="58" r="6" fill="#101013"/><circle cx="18" cy="58" r="6" fill="#101013"/>'
-            f'<path d="M-16 86 Q0 98 16 86" fill="none" stroke="#101013" stroke-width="5" stroke-linecap="round"/></g>')
-def estrela(x, y, r, cor, d):
-    import math
-    pts = ' '.join(f'{x + (r if k % 2 == 0 else r * .5) * math.cos(math.pi * k / 8):.1f},{y + (r if k % 2 == 0 else r * .5) * math.sin(math.pi * k / 8):.1f}' for k in range(16))
-    return f'<polygon points="{pts}" fill="{cor}" stroke="#101013" stroke-width="5" style="transform-origin:{x}px {y}px;animation:pop .4s {d}s both"/>'
-q1 = (f'<div class="qd a" style="left:34px;top:62px;width:410px;height:520px;animation:slamL .6s .2s both">'
-      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(205, 300, "#E63946", 1.05)}'
-      f'<path d="M150 330 L130 300 M260 330 L280 300 M205 318 L205 286" stroke="#101013" stroke-width="5" stroke-linecap="round" style="animation:fade .2s 1.2s both"/>'
-      f'<rect x="60" y="500" width="290" height="40" fill="#FFFFFF" stroke="#101013" stroke-width="6"/></svg>'
-      f'<span class="cap">A CLIENTE</span></div>'
-      f'<div class="bl t" style="left:60px;top:140px;width:330px;animation:pop .45s 1.0s both, wob 1.6s 1.5s infinite ease-in-out">QUERO UMA GELADEIRA… MAS O DINHEIRO <em>TÁ CURTO!</em></div>')
-q2 = (f'<div class="qd b" style="left:476px;top:62px;width:410px;height:520px;animation:slamR .6s .7s both">'
-      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(150, 300, "#1D4ED8", 1.05)}'
-      f'<g style="transform-origin:284px 440px;animation:buzz .12s 2.6s 14 linear">'
-      f'<rect x="232" y="356" width="104" height="170" rx="16" fill="#101013"/>'
-      f'<rect x="244" y="372" width="80" height="120" rx="8" fill="#FFD23F"/>'
-      f'<text x="284" y="446" text-anchor="middle" font-family="Bangers" font-size="40" fill="#E63946">IA</text></g>'
-      f'<path d="M350 380 L378 368 M352 420 L384 420 M350 460 L378 472" stroke="#101013" stroke-width="6" stroke-linecap="round" style="animation:fade .1s 2.6s both, blinkS .24s 2.6s 7"/></svg>'
-      f'<span class="cap">O VENDEDOR</span></div>'
-      f'<div class="bl tr" style="left:500px;top:140px;width:360px;font-size:34px;animation:pop .45s 2.0s both">"DIGITA O CPF DELA: A IA ME DIZ O QUE <em>CABE NO BOLSO.</em>"</div>'
-      f'<svg class="star" style="left:0;top:0;width:920px;height:660px;pointer-events:none" viewBox="0 0 920 660">{estrela(760, 336, 74, "#FFFFFF", 2.7)}</svg>'
-      f'<div class="bum" style="left:676px;top:282px;animation:pop .4s 2.8s both, shake .5s 3.2s 4 both">BIP!</div>')
-PAGS.append((6.5, page('1/6', 'NA PRÁTICA', TB('A Casas Bahia pôs uma IA para soprar a venda no ouvido de <em>mais de 10 mil vendedores.</em>') + TP('Chama Bah.IA. Te mostro como funciona ↓'),
-    f'<div class="hq cena"><div class="rays"></div><div class="dotsr"></div><div class="zoom">{q1}{q2}</div>{IL}{FB}<span class="sty">ESTILO · QUADRINHO</span></div>', 'Arraste →')))
+# v3 (27/11, pedido do Lucas): padrão único em todas as páginas, o do slide 3 (traço neon synthwave).
+CY, MG, YL, GR = '#00F0FF', '#FF2BD6', '#FFE600', '#39FF14'
+BG = '<div class="sun"></div><div class="floor"></div>'
+STY = '<span class="sty">ESTILO · TRAÇO NEON</span>'
+def nbox(x, y, w, h, cor, d, rx=16):
+    L = 2 * (w + h) + 20
+    return f'<rect class="cd" x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" stroke="{cor}" color="{cor}" style="--L:{L};stroke-dasharray:{L};animation:draw .6s {d:.2f}s both ease-in-out, neonOn .8s {d + .6:.2f}s both"/>'
+def ntxt(x, y, w, txt, size, cor, d, cls='gt', extra=''):
+    sh = f'text-shadow:0 0 12px {cor};' if cor != '#FFFFFF' else ''
+    return f'<div class="{cls}" style="left:{x}px;top:{y}px;width:{w}px;font-size:{size}px;line-height:1.18;color:{cor};{sh}animation:wipe .5s {d:.2f}s both{extra}">{txt}</div>'
 
-# ---------- 2 · FLAT VECTOR: CPF → 3 fontes de dados ----------
-ICO = lambda c: [f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><path d="M6 36 C6 24 34 24 34 36"/></svg>',
-                  f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round"><circle cx="17" cy="17" r="11"/><path d="M25 25 L36 36"/></svg>',
-                  f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6 H9 L13 27 H32 L36 12 H11"/><circle cx="15" cy="34" r="2.5"/><circle cx="30" cy="34" r="2.5"/></svg>']
-CORES = ['#4D7CFE', '#1FB5A9', '#FF6B6B']
+# ---------- 1 · capa: a cliente × o vendedor com a IA ----------
+def boneco(cx, cy, cor, d):
+    return (f'<circle class="cd" cx="{cx}" cy="{cy}" r="44" stroke="{cor}" color="{cor}" style="--L:280;stroke-dasharray:280;animation:draw .6s {d:.2f}s both"/>'
+            f'<path class="cd" d="M{cx - 70} {cy + 150} C{cx - 70} {cy + 70},{cx + 70} {cy + 70},{cx + 70} {cy + 150}" stroke="{cor}" color="{cor}" style="--L:260;stroke-dasharray:260;animation:draw .6s {d + .3:.2f}s both"/>')
+c1 = '<svg class="sv" viewBox="0 0 920 660">'
+c1 += nbox(34, 40, 410, 540, MG, .2) + nbox(476, 40, 410, 540, CY, .5)
+c1 += boneco(240, 360, MG, 1.0) + boneco(620, 360, CY, 1.6)
+c1 += f'<rect class="cd" x="720" y="390" width="96" height="160" rx="14" stroke="{YL}" color="{YL}" style="--L:540;stroke-dasharray:540;animation:draw .5s 2.2s both, neonOn .8s 2.7s both"/>'
+c1 += f'<path class="cd" d="M836 420 L860 408 M838 466 L866 466 M836 512 L860 524" stroke="{YL}" color="{YL}" style="animation:fade .1s 3.0s both, blinkS .24s 3.0s 7"/>'
+c1 += '</svg>'
+c1 += f'<div class="gn" style="left:58px;top:62px;font-size:22px;color:{MG};text-shadow:0 0 12px {MG};animation:neonOn .8s .8s both">A CLIENTE</div>'
+c1 += f'<div class="gn" style="left:500px;top:62px;font-size:22px;color:{CY};text-shadow:0 0 12px {CY};animation:neonOn .8s 1.1s both">O VENDEDOR</div>'
+c1 += f'<div class="gn" style="left:742px;top:448px;font-size:38px;color:{YL};text-shadow:0 0 14px {YL};animation:neonOn .8s 2.8s both">IA</div>'
+c1 += ntxt(62, 112, 360, '"Quero uma geladeira… mas o dinheiro <span style="color:#FF2BD6;text-shadow:0 0 12px #FF2BD6">tá curto."</span>', 32, '#FFFFFF', 1.3)
+c1 += ntxt(504, 112, 360, '"Digita o CPF dela: a IA me diz o que <span style="color:#00F0FF;text-shadow:0 0 12px #00F0FF">cabe no bolso."</span>', 32, '#FFFFFF', 2.0)
+PAGS.append((6.5, page('1/6', 'NA PRÁTICA', TB('A Casas Bahia pôs uma IA para soprar a venda no ouvido de <em>mais de 10 mil vendedores.</em>') + TP('Chama Bah.IA. Te mostro como funciona ↓'),
+    f'<div class="glow cena">{BG}<div class="scan" style="left:0;width:920px;animation:scan 1.6s 3.4s 1 linear both"></div>{c1}{IL}{FB}{STY}</div>', 'Arraste →')))
+
+# ---------- 2 · CPF → 3 fontes de dados ----------
+NI = [f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{{c}}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px {{c}})"><circle cx="20" cy="13" r="7"/><path d="M6 36 C6 24 34 24 34 36"/></svg>',
+      f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{{c}}" stroke-width="4" stroke-linecap="round" style="filter:drop-shadow(0 0 6px {{c}})"><circle cx="17" cy="17" r="11"/><path d="M25 25 L36 36"/></svg>',
+      f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{{c}}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px {{c}})"><path d="M3 6 H9 L13 27 H32 L36 12 H11"/><circle cx="15" cy="34" r="2.5"/><circle cx="30" cy="34" r="2.5"/></svg>']
+C3 = [MG, YL, GR]
 srcs = [('Perfil', 'quem é o cliente'), ('Navegação', 'o que ele olhou no site'), ('Compras', 'o que já levou antes')]
-fl = ''.join(f'<span class="blob" style="left:{x}px;top:{y}px;width:{w}px;height:{w}px;background:{c};opacity:.22;animation:float {t}s {-t / 3:.1f}s infinite ease-in-out"></span>'
-             for x, y, w, c, t in [(-60, 420, 260, '#FFC93C', 6), (700, -80, 240, '#4D7CFE', 7), (330, 520, 140, '#FF6B6B', 5), (820, 470, 120, '#1FB5A9', 6)])
-fl += (f'<div class="ph" style="animation:bounceIn 1s .1s both"><div class="scr"></div><span class="cpf">CPF DO CLIENTE</span>'
-       f'<span class="in" style="--W:180px;animation:typ 1s 1.0s both steps(14)">123.456.789-00</span>'
-       f'<span class="bt" style="animation:fade .3s .8s both, press .35s 2.1s both">Consultar</span>'
-       f'<span class="ok" style="animation:pop .4s 4.6s both">✓ histórico carregado</span></div>')
-fl += '<svg class="sv" viewBox="0 0 920 660">'
+f2 = '<svg class="sv" viewBox="0 0 920 660">'
+f2 += f'<rect class="ph" x="60" y="100" width="250" height="460" rx="34" style="--L:1500;stroke-dasharray:1500;animation:draw 1s .2s both ease-in-out"/>'
+f2 += nbox(84, 196, 202, 50, CY, 1.0, 10) + nbox(84, 270, 202, 52, MG, 1.4, 26)
 for k in range(3):
-    y = 120 + 150 * k + 54
-    fl += f'<path d="M312 330 C 360 330, 360 {y}, 418 {y}" fill="none" stroke="{CORES[k]}" stroke-width="6" stroke-linecap="round" stroke-dasharray="4 14" style="animation:fade .3s {2.3 + .1 * k:.2f}s both"/>'
-fl += '</svg>'
+    yy = 120 + 150 * k + 54
+    f2 += f'<path d="M312 330 C 360 330, 360 {yy}, 418 {yy}" fill="none" stroke="{C3[k]}" stroke-width="4" stroke-dasharray="4 12" stroke-linecap="round" style="filter:drop-shadow(0 0 6px {C3[k]});animation:fade .3s {2.3 + .1 * k:.2f}s both"/>'
+    f2 += nbox(420, 120 + 150 * k, 450, 108, C3[k], 2.6 + .5 * k)
+f2 += '</svg>'
+f2 += f'<div class="gn" style="left:86px;top:160px;font-size:16px;color:{CY};text-shadow:0 0 10px {CY};animation:fade .3s .9s both">CPF DO CLIENTE</div>'
+f2 += f'<div class="gn" style="left:98px;top:208px;font-size:20px;color:#FFFFFF;overflow:hidden;white-space:nowrap;--W:180px;animation:typ 1s 1.1s both steps(14)">123.456.789-00</div>'
+f2 += f'<div class="gt" style="left:84px;top:284px;width:202px;text-align:center;font-size:22px;color:{MG};text-shadow:0 0 12px {MG};animation:fade .3s 1.6s both, press .35s 2.1s both">Consultar</div>'
+f2 += f'<div class="gn" style="left:84px;top:356px;width:202px;text-align:center;font-size:18px;color:{GR};text-shadow:0 0 10px {GR};animation:neonOn .8s 4.6s both">✓ histórico<br>carregado</div>'
 for k, (t, s) in enumerate(srcs):
     y = 120 + 150 * k
-    d = 2.9 + .5 * k
     yy = y + 54
+    d = 2.9 + .5 * k
     for j in range(3):
-        fl += f'<span class="pk" style="background:{CORES[k]};offset-path:path(\'M312 330 C 360 330, 360 {yy}, 418 {yy}\');animation:travel .7s {2.3 + .25 * j + .15 * k:.2f}s both linear"></span>'
-    fl += f'<div class="src" style="top:{y}px;background:{CORES[k]};animation:flipIn .6s {d:.2f}s both cubic-bezier(.2,.8,.2,1)"><i>{ICO(CORES[k])[k]}</i><div><b>{t}</b><span>{s}</span></div></div>'
+        f2 += f'<span class="pk" style="background:{C3[k]};box-shadow:0 0 12px {C3[k]};offset-path:path(\'M312 330 C 360 330, 360 {yy}, 418 {yy}\');animation:travel .7s {2.3 + .25 * j + .15 * k:.2f}s both linear"></span>'
+    f2 += f'<div style="position:absolute;left:446px;top:{y + 34}px;animation:neonOn .8s {d:.2f}s both">{NI[k].replace("{c}", C3[k])}</div>'
+    f2 += ntxt(510, y + 20, 340, t, 30, '#FFFFFF', d + .1)
+    f2 += ntxt(510, y + 60, 340, s, 21, '#E9E3FF', d + .25, 'gs')
 PAGS.append((6.0, page('2/6', None, TB('1. O vendedor digita o CPF. <em>A IA lê o histórico do cliente.</em>') + TP('Perfil, o que ele olhou no site e o que já comprou.'),
-    f'<div class="flat cena">{fl}{IL}{FB}<span class="sty">ESTILO · FLAT VECTOR</span></div>', 'Arraste →')))
+    f'<div class="glow cena">{BG}{f2}{IL}{FB}{STY}</div>', 'Arraste →')))
+
+# (o slide 3 fica como está; o bloco dele vem do v2)
 
 # ---------- 3 · TRAÇO NEON synthwave: a tela que volta para o vendedor ----------
 tela = 'M300 30 L620 30 Q650 30 650 60 L650 570 Q650 600 620 600 L300 600 Q270 600 270 570 L270 60 Q270 30 300 30 Z'
@@ -271,47 +289,44 @@ gl += '<div class="side" style="left:690px;top:230px;color:#FF2BD6;text-shadow:0
 PAGS.append((6.5, page('3/6', None, TB('2. A IA sugere <em>o que oferecer e como falar.</em>') + TP('Produto certo para o bolso e o perfil, abordagem e comparação.'),
     f'<div class="glow cena">{gl}{EX}{FB}<span class="sty">ESTILO · TRAÇO NEON</span></div>', 'Arraste →')))
 
-# ---------- 4 · PIXEL ART tela de jogo: o que a empresa diz que mudou ----------
-nums = [('10MIL+', 'vendedores usam o copiloto', 'Casas Bahia (CTO e CEO)', '#FFE600', 100, 'PLAYERS'),
-        ('+40%', 'de produtividade nas lojas físicas', 'CEO Renato Franklin, ao NeoFeed (ago/2026)', '#3AB54A', 70, 'LEVEL UP!'),
-        ('+50%', 'de conversão nas vendas pelo WhatsApp', 'CTO Filipe Jaske, à Baguete (set/2025) · canal todo', '#FF4D6D', 80, 'COMBO!')]
-px = ''.join(f'<i class="cl" style="left:{x}px;top:{y}px;animation:float {t}s infinite ease-in-out"></i>' for x, y, t in [(90, 22, 7), (560, 34, 9)])
-px += '<div class="ground"></div>'
-for k, (n, d, s, c, w, lv) in enumerate(nums):
-    t0 = .4 + 1.2 * k
-    top = 52 + 160 * k
-    px += (f'<div class="bx" style="top:{top}px;border-color:{c};animation:pop .45s {t0:.2f}s both steps(4)">'
-           f'<span class="n" style="color:{c};animation:fade .01s {t0 + .3:.2f}s both, blinkS .2s {t0 + .3:.2f}s 3 steps(1)">{n}</span>'
-           f'<span class="bar"><i style="--W:{w}%;background:{c};animation:fillB .9s {t0 + .4:.2f}s both steps(10)"></i></span>'
-           f'<div class="d" style="animation:fade .01s {t0 + .7:.2f}s both">{d}<small>{s}</small></div></div>'
-           f'<span class="lv" style="right:58px;top:{top - 14}px;animation:pop .3s {t0 + 1.0:.2f}s both steps(3)">{lv}</span>')
-    px += ''.join(f'<i class="cn" style="left:{200 + 40 * j}px;top:{top + 20}px;animation:coin .6s {t0 + .9 + .12 * j:.2f}s both steps(6)"></i>' for j in range(3))
+# ---------- 4 · o que a empresa diz que mudou (neon) ----------
+nums = [('10 mil+', 'vendedores usam o copiloto', 'Casas Bahia (CTO e CEO)', YL, 100),
+        ('+40%', 'de produtividade nas lojas físicas', 'CEO Renato Franklin, ao NeoFeed (ago/2026)', GR, 70),
+        ('+50%', 'de conversão nas vendas pelo WhatsApp', 'CTO Filipe Jaske, à Baguete (set/2025) · canal todo', MG, 80)]
+f4 = '<svg class="sv" viewBox="0 0 920 660">'
+for k, (n, d, s, c, w) in enumerate(nums):
+    f4 += nbox(40, 40 + 180 * k, 840, 150, c, .3 + 1.1 * k)
+f4 += '</svg>'
+for k, (n, d, s, c, w) in enumerate(nums):
+    t0 = .3 + 1.1 * k
+    top = 40 + 180 * k
+    f4 += f'<div class="gn" style="left:68px;top:{top + 22}px;font-size:58px;color:{c};text-shadow:0 0 14px {c},0 0 30px {c};animation:neonOn .9s {t0 + .5:.2f}s both">{n}</div>'
+    f4 += f'<span class="nbar" style="left:70px;top:{top + 104}px"><i style="--W:{w}%;background:{c};box-shadow:0 0 12px {c};animation:fillB .9s {t0 + .6:.2f}s both cubic-bezier(.2,.8,.2,1)"></i></span>'
+    f4 += ntxt(370, top + 30, 480, d, 27, '#FFFFFF', t0 + .7)
+    f4 += ntxt(370, top + 100, 480, s, 18, '#C9C1E8', t0 + .9, 'gs')
 PAGS.append((6.5, page('4/6', None, TB('3. O que a Casas Bahia <em>diz que mudou.</em>') + TP('Números da própria empresa, sem auditoria de fora.'),
-    f'<div class="pixel cena">{px}{FB}<span class="sty">ESTILO · PIXEL ART</span></div>', 'Arraste →')))
+    f'<div class="glow cena">{BG}{f4}{FB}{STY}</div>', 'Arraste →')))
 
-# ---------- 5 · QUADRO DE GIZ (lousa verde, giz colorido): no seu negócio ----------
-filt = ('<filter id="chalk"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="n"/>'
-        '<feDisplacementMap in="SourceGraphic" in2="n" scale="5"/></filter>')
-passos = [('Cadastre quem compra', '(nome e WhatsApp)', 'b'), ('Anote o que levou e quando', '(planilha já serve)', 'p'), ('Aí a IA sugere a próxima venda', '', 'y')]
-gz = f'<svg class="sv" viewBox="0 0 920 660">{filt}'
-gz += path('M62 114 L540 114', 'lny', 1.2, .5, 520)
-for k in range(3):
-    y = 220 + 120 * k
-    gz += f'<rect class="ln" x="62" y="{y - 34}" width="46" height="46" style="--L:200;stroke-dasharray:200;animation:draw .35s {1.5 + 1.0 * k:.2f}s both"/>'
-    if k < 2:
-        gz += path(f'M70 {y - 12} L84 {y + 4} L108 {y - 40}', 'lny', 2.3 + 1.0 * k, .3, 90)
-gz += path('M120 448 C 120 394, 870 394, 870 448 C 870 506, 120 506, 126 442', 'lnp', 4.3, .8, 1700)
-gz += path('M890 560 C 860 520, 830 500, 790 498 M808 482 L788 498 L810 512', 'lnp', 5.1, .5, 300)
-gz += '</svg>'
-gz += '<div class="hw" style="left:62px;top:48px;font-size:58px;animation:wipe .9s .3s both steps(18)">E no seu negócio?</div>'
+# ---------- 5 · no seu negócio (neon) ----------
+passos = [('Cadastre quem compra', '(nome e WhatsApp)', CY), ('Anote o que levou e quando', '(planilha já serve)', YL), ('Aí a IA sugere a próxima venda', '', MG)]
+f5 = '<svg class="sv" viewBox="0 0 920 660">'
 for k, (t, s, c) in enumerate(passos):
-    y = 220 + 120 * k
-    d = 1.6 + 1.0 * k
-    gz += f'<div class="hw {c}" style="left:130px;top:{y - 46}px;font-size:{50 if k < 2 else 54}px;animation:wipe .8s {d:.2f}s both steps(16)">{t} <span style="font-size:34px;color:#D8E8DA">{s}</span></div>'
-    gz += ''.join(f'<i class="du" style="left:{140 + 70 * j + 30 * k}px;top:{y + 4}px;--dx:{(-1) ** j * 12}px;animation:dust .8s {d + .1 * j:.2f}s both"></i>' for j in range(5))
-gz += '<div class="hw" style="left:62px;top:552px;font-size:42px;animation:wipe 1s 5.4s both steps(20)">sem histórico, nenhuma IA adivinha nada.</div>'
+    y = 200 + 120 * k
+    d = 1.2 + 1.0 * k
+    f5 += f'<rect class="cd" x="62" y="{y - 30}" width="48" height="48" rx="8" stroke="{c}" color="{c}" style="--L:200;stroke-dasharray:200;animation:draw .35s {d:.2f}s both, neonOn .6s {d + .3:.2f}s both"/>'
+    if k < 2:
+        f5 += f'<path class="cd" d="M72 {y - 6} L84 {y + 8} L104 {y - 22}" stroke="{GR}" color="{GR}" style="--L:60;stroke-dasharray:60;animation:draw .3s {d + .6:.2f}s both"/>'
+f5 += f'<rect class="cd" x="40" y="402" width="840" height="84" rx="42" stroke="{MG}" color="{MG}" style="--L:1900;stroke-dasharray:1900;animation:draw .8s 4.2s both, neonOn .8s 5.0s both"/>'
+f5 += '</svg>'
+f5 += ntxt(62, 50, 700, 'E no seu negócio?', 46, '#FFFFFF', .3)
+for k, (t, s, c) in enumerate(passos):
+    y = 200 + 120 * k
+    d = 1.4 + 1.0 * k
+    extra = f'<span style="font-family:Inter,sans-serif;font-weight:500;font-size:22px;color:#C9C1E8;text-shadow:none"> {s}</span>' if s else ''
+    f5 += ntxt(132, y - 26, 740, t + extra, 34, c if k == 2 else '#FFFFFF', d)
+f5 += f'<div class="side" style="left:62px;top:540px;width:800px;font-size:26px;color:{CY};text-shadow:0 0 12px {CY};animation:neonOn 1s 5.4s both">sem histórico, nenhuma IA adivinha nada.</div>'
 PAGS.append((7.0, page('5/6', None, TB('4. No seu negócio, o começo é <em>anotar quem compra o quê.</em>') + TP('A IA da Casas Bahia só funciona porque o histórico existe.'),
-    f'<div class="giz cena">{gz}{EX}<span class="sty">ESTILO · QUADRO DE GIZ</span></div>', 'Arraste →')))
+    f'<div class="glow cena">{BG}{f5}{EX}{STY}</div>', 'Arraste →')))
 
 # ---------- 6 · CTA ----------
 cm = (f'<div class="ctaw"><div class="kw" {A("pop", .6, .4)}><span class="kwl">comente</span><b class="tw">DIAGNÓSTICO</b></div>'
@@ -319,7 +334,7 @@ cm = (f'<div class="ctaw"><div class="kw" {A("pop", .6, .4)}><span class="kwl">c
       f'<div class="cm me" {A("inUp", .6, 3.1)}><img src="{AV}" alt=""><div><b>lucasgiordane</b><span>Te chamei no direct! 📩</span></div></div>'
       f'<div class="dm" {A("inUp", .6, 4.2)}><small>direct · lucasgiordane</small><span>Oi! Me conta: qual é o seu negócio e o que mais trava hoje?</span></div></div>')
 PAGS.append((7.0, page('6/6', 'SUA VEZ', TB('Seu vendedor sabe o que o cliente <em>já comprou</em> antes de atender?') + TP('<b>Comenta DIAGNÓSTICO</b> que eu te chamo no direct e a gente olha o seu caso. E salva para não perder.'),
-    cm, 'Comenta DIAGNÓSTICO ↓')))
+    f'<div class="glow cena">{BG}<div class="ctan">{cm}</div></div>', 'Comenta DIAGNÓSTICO ↓')))
 
 with sync_playwright() as pw:
     br = pw.chromium.launch()
