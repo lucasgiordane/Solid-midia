@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """@lucasgiordane · 27/11/2026 · Modelo 2 NA PRÁTICA: "Casas Bahia: o copiloto de IA dos vendedores (Bah.IA)".
 Pedido do Lucas: usar vários estilos de animação da referência @yleintech ("10 Claude Animation styles"), um por página:
+  v2 (27/11): cada estilo com paleta própria dentro da caixa e animação fora do padrão (pedido do Lucas).
   1 Quadrinho (Comic Art) · 2 Flat Vector · 3 Traço neon (Glow Sketch) · 4 Pixel Art · 5 Quadro de giz (Chalkboard) · 6 CTA padrão.
 Uso: python3 -I gerar.py <saida> <solid26.css> <blobs> <fontes> png|mp4|medir [páginas, ex.: 1,4]
 Fontes: Baguete, 12/09/2025 (Bah.IA, Gemini, CI&T, CTO Filipe Jaske); NeoFeed, 11/08/2026 (CEO Renato Franklin, +40% produtividade)."""
@@ -51,53 +52,105 @@ svg.sv{position:absolute;inset:0;width:100%;height:100%}
 @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes typ{from{width:0}to{width:var(--W)}}
 
-/* ---------- 1 · QUADRINHO ---------- */
-.hq{background:#F4F1EA;background-image:radial-gradient(#D9D2C1 2.2px,transparent 2.4px);background-size:16px 16px}
-.hq .qd{position:absolute;background:#FFFFFF;border:6px solid #101013;box-shadow:10px 10px 0 #101013;overflow:hidden}
+/* v2 (27/11, pedido do Lucas): cada estilo com a sua paleta própria dentro da caixa e animação fora do padrão.
+   Cabeçalho, texto de cima e rodapé seguem a identidade 2026. Contraste alto em tudo, nunca tom sobre tom. */
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -5% 0 0)}}
+@keyframes slamL{0%{opacity:0;transform:translate(-120px,40px) rotate(-14deg) scale(.7)}70%{opacity:1;transform:translate(8px,-4px) rotate(2deg) scale(1.03)}100%{opacity:1;transform:rotate(-1.5deg)}}
+@keyframes slamR{0%{opacity:0;transform:translate(120px,40px) rotate(14deg) scale(.7)}70%{opacity:1;transform:translate(-8px,-4px) rotate(-2deg) scale(1.03)}100%{opacity:1;transform:rotate(1.5deg)}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes zoomin{0%,100%{transform:scale(1)}40%{transform:scale(1.06) rotate(-.6deg)}}
+@keyframes buzz{0%,100%{transform:translate(0,0) rotate(0)}20%{transform:translate(-4px,1px) rotate(-3deg)}40%{transform:translate(4px,-1px) rotate(3deg)}60%{transform:translate(-3px,0) rotate(-2deg)}80%{transform:translate(3px,1px) rotate(2deg)}}
+@keyframes wob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes bounceIn{0%{opacity:0;transform:translateY(-260px)}55%{opacity:1;transform:translateY(0)}72%{transform:translateY(-36px)}86%{transform:translateY(0)}93%{transform:translateY(-10px)}100%{opacity:1;transform:none}}
+@keyframes press{0%,100%{transform:scale(1)}45%{transform:scale(.88)}}
+@keyframes flipIn{from{opacity:0;transform:perspective(900px) rotateY(-95deg)}to{opacity:1;transform:perspective(900px) rotateY(0)}}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,-18px)}}
+@keyframes travel{0%{offset-distance:0%;opacity:0}10%{opacity:1}90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes glitch{0%,100%{transform:none;opacity:1}20%{transform:translate(-6px,0) skewX(-8deg);opacity:.7}22%{transform:translate(5px,0);opacity:1}24%{transform:none}60%{opacity:1}62%{opacity:.3}64%{opacity:1}}
+@keyframes scan{from{transform:translateY(-40px)}to{transform:translateY(600px)}}
+@keyframes gridmove{from{background-position:0 0}to{background-position:0 60px}}
+@keyframes neonOn{0%{opacity:0}10%{opacity:1}14%{opacity:.2}18%{opacity:1}30%{opacity:.4}34%,100%{opacity:1}}
+@keyframes coin{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-90px)}}
+@keyframes fillB{from{width:0}to{width:var(--W)}}
+@keyframes blinkS{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes dust{0%{opacity:.9;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--dx),60px)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}
+
+/* ---------- 1 · QUADRINHO (pop art) ---------- */
+.hq{background:#FFD23F;overflow:hidden}
+.hq .rays{position:absolute;left:50%;top:50%;width:1600px;height:1600px;margin:-800px 0 0 -800px;background:repeating-conic-gradient(#FFB627 0 8deg,#FFD23F 8deg 16deg);animation:spin 40s linear infinite}
+.hq .dotsr{position:absolute;inset:0;background-image:radial-gradient(rgba(230,57,70,.28) 3px,transparent 3.4px);background-size:18px 18px}
+.hq .zoom{position:absolute;inset:0;animation:zoomin 1.4s 3.0s both ease-in-out}
+.hq .qd{position:absolute;border:7px solid #101013;box-shadow:12px 12px 0 #101013;overflow:hidden}
+.hq .qd.a{background:#7FD1F5}
+.hq .qd.b{background:#FF8FB1}
 .hq .bl{position:absolute;background:#FFFFFF;border:5px solid #101013;border-radius:28px;padding:16px 22px;font-family:Bangers,cursive;font-size:38px;letter-spacing:.03em;color:#101013;text-align:center;line-height:1.05;z-index:3}
+.hq .bl em{font-style:normal;color:#E63946}
 .hq .bl.t::after{content:'';position:absolute;left:60px;bottom:-26px;border:16px solid transparent;border-top:26px solid #101013;border-bottom:0}
 .hq .bl.tr::after{content:'';position:absolute;right:60px;bottom:-26px;border:16px solid transparent;border-top:26px solid #101013;border-bottom:0}
-.hq .bum{position:absolute;font-family:Bangers,cursive;font-size:78px;color:#DDA94F;-webkit-text-stroke:4px #101013;letter-spacing:.04em;z-index:4}
-.hq .cap{position:absolute;left:0;top:0;background:#DDA94F;border-right:5px solid #101013;border-bottom:5px solid #101013;font-family:Bangers,cursive;font-size:30px;letter-spacing:.04em;padding:6px 14px;color:#101013}
-.hq .sty{color:#101013;font-weight:600}
-.hq .fonte{color:#3C4149}
-/* ---------- 2 · FLAT VECTOR ---------- */
-.flat{background:#1E2025}
-.flat .ph{position:absolute;left:60px;top:120px;width:250px;height:440px;border-radius:36px;background:#F4F1EA}
-.flat .ph .scr{position:absolute;left:16px;right:16px;top:40px;bottom:40px;border-radius:18px;background:#101013;overflow:hidden}
-.flat .ph .cpf{position:absolute;left:16px;right:16px;top:60px;font-family:'IBM Plex Mono',monospace;font-size:16px;color:#A5A8AE}
-.flat .ph .in{position:absolute;left:16px;top:88px;height:48px;border-radius:10px;background:#F4F1EA;color:#101013;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:21px;line-height:48px;padding-left:12px;overflow:hidden;white-space:nowrap}
-.flat .ph .bt{position:absolute;left:16px;right:16px;top:156px;height:52px;border-radius:10px;background:#DDA94F;color:#101013;font-family:Manrope,sans-serif;font-weight:800;font-size:22px;text-align:center;line-height:52px}
-.flat .src{position:absolute;left:400px;width:470px;height:104px;border-radius:18px;background:#F4F1EA;color:#101013;display:flex;align-items:center;gap:20px;padding:0 24px;box-sizing:border-box}
-.flat .src i{flex:none;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:34px}
-.flat .src b{display:block;font-family:Manrope,sans-serif;font-weight:800;font-size:28px}
-.flat .src span{display:block;font-size:20px;color:#3C4149;margin-top:2px}
-.flat .ln{position:absolute;height:6px;background:#DDA94F;border-radius:3px;transform-origin:left center}
-.flat .sty{color:#A5A8AE}
-/* ---------- 3 · TRAÇO NEON ---------- */
-.glow{background:#0A0A0C}
-.glow .ln{fill:none;stroke:#DDA94F;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px #DDA94F) drop-shadow(0 0 16px rgba(221,169,79,.6))}
-.glow .ln2{fill:none;stroke:#F4F1EA;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(244,241,234,.8))}
-.glow .gt{position:absolute;font-family:Manrope,sans-serif;font-weight:800;color:#F4F1EA;text-shadow:0 0 10px rgba(244,241,234,.6)}
-.glow .gs{position:absolute;font-family:Inter,sans-serif;font-weight:500;color:#D9D4C7}
-.glow .gn{position:absolute;font-family:'IBM Plex Mono',monospace;font-weight:600;color:#DDA94F;text-shadow:0 0 12px #DDA94F,0 0 28px rgba(221,169,79,.6)}
-.glow .sty{color:#DDA94F}
-/* ---------- 4 · PIXEL ---------- */
-.pixel{background:#101013}
-.pixel .px{position:absolute;font-family:'Press Start 2P',monospace;color:#F4F1EA;line-height:1.5}
-.pixel .bx{position:absolute;left:44px;right:44px;height:150px;background:#1E2025;border:6px solid #F4F1EA;box-shadow:8px 8px 0 #3C4149;box-sizing:border-box}
-.pixel .bx.g{border-color:#DDA94F;box-shadow:8px 8px 0 #A6752D}
-.pixel .bx .n{position:absolute;left:26px;top:44px;font-family:'Press Start 2P',monospace;font-size:34px;color:#DDA94F}
-.pixel .bx .d{position:absolute;left:330px;right:20px;top:26px;font-family:Inter,sans-serif;font-weight:600;font-size:24px;color:#F4F1EA;line-height:1.3}
-.pixel .bx .d small{display:block;font-weight:500;font-size:18px;color:#A5A8AE;margin-top:6px}
-.pixel .sty{color:#DDA94F;font-family:'Press Start 2P',monospace;font-size:11px}
-/* ---------- 5 · QUADRO DE GIZ ---------- */
-.giz{background:#1E2025;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:6px 6px}
-.giz .ln{fill:none;stroke:#F4F1EA;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:url(#chalk);opacity:.92}
-.giz .lng{fill:none;stroke:#DDA94F;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;filter:url(#chalk)}
-.giz .hw{position:absolute;font-family:Caveat,cursive;font-weight:700;color:#F4F1EA;line-height:1.05}
-.giz .hw.g{color:#DDA94F}
-.giz .sty{color:#A5A8AE}
+.hq .bum{position:absolute;font-family:Bangers,cursive;font-size:92px;color:#E63946;-webkit-text-stroke:5px #101013;letter-spacing:.04em;z-index:4;text-shadow:6px 6px 0 #FFFFFF}
+.hq .star{position:absolute;z-index:3}
+.hq .cap{position:absolute;left:0;top:0;background:#101013;font-family:Bangers,cursive;font-size:30px;letter-spacing:.04em;padding:6px 14px;color:#FFD23F}
+.hq .sty,.hq .fonte{color:#101013;font-weight:600;background:#FFD23F;padding:2px 6px}
+.hq .fonte{left:20px}
+.hq .il-l{background:#101013;color:#FFD23F}
+/* ---------- 2 · FLAT VECTOR (pastel e cor viva) ---------- */
+.flat{background:#FFF1E0;overflow:hidden}
+.flat .blob{position:absolute;border-radius:50%}
+.flat .ph{position:absolute;left:60px;top:110px;width:250px;height:440px;border-radius:36px;background:#2B2D42;box-shadow:0 24px 0 rgba(43,45,66,.15)}
+.flat .ph .scr{position:absolute;left:16px;right:16px;top:40px;bottom:40px;border-radius:18px;background:#FFFFFF;overflow:hidden}
+.flat .ph .cpf{position:absolute;left:30px;right:16px;top:64px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:#4D7CFE}
+.flat .ph .in{position:absolute;left:30px;top:92px;height:48px;border-radius:10px;background:#EEF2FF;color:#2B2D42;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:19px;line-height:48px;padding-left:10px;overflow:hidden;white-space:nowrap}
+.flat .ph .bt{position:absolute;left:30px;right:30px;top:160px;height:52px;border-radius:26px;background:#FF6B6B;color:#FFFFFF;font-family:Manrope,sans-serif;font-weight:800;font-size:22px;text-align:center;line-height:52px}
+.flat .ph .ok{position:absolute;left:30px;right:30px;top:240px;font-family:Manrope,sans-serif;font-weight:800;font-size:20px;color:#1FB5A9;text-align:center}
+.flat .src{position:absolute;left:420px;width:450px;height:108px;border-radius:22px;color:#FFFFFF;display:flex;align-items:center;gap:20px;padding:0 24px;box-sizing:border-box;transform-origin:left center}
+.flat .src i{flex:none;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center}
+.flat .src b{display:block;font-family:Manrope,sans-serif;font-weight:800;font-size:30px}
+.flat .src span{display:block;font-size:21px;margin-top:2px;font-weight:500}
+.flat .pk{position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;margin:-11px 0 0 -11px}
+.flat .sty,.flat .fonte{color:#2B2D42}
+.flat .il-l{background:#2B2D42;color:#FFF1E0}
+/* ---------- 3 · TRAÇO NEON (synthwave) ---------- */
+.glow{background:linear-gradient(#0D0221 0%,#1A0638 62%,#2D0B57 100%);overflow:hidden}
+.glow .floor{position:absolute;left:-200px;right:-200px;bottom:-40px;height:260px;transform:perspective(320px) rotateX(58deg);transform-origin:bottom center;background-image:linear-gradient(#FF2BD6 2px,transparent 2px),linear-gradient(90deg,#FF2BD6 2px,transparent 2px);background-size:60px 60px;opacity:.45;animation:gridmove 1.2s linear infinite}
+.glow .sun{position:absolute;left:50%;top:300px;width:300px;height:300px;margin-left:-150px;border-radius:50%;background:linear-gradient(#FFE600,#FF2BD6);opacity:.22;filter:blur(2px)}
+.glow .ph{fill:#0D0221;fill-opacity:.85;stroke:#00F0FF;stroke-width:5;stroke-linejoin:round;filter:drop-shadow(0 0 8px #00F0FF) drop-shadow(0 0 22px rgba(0,240,255,.6))}
+.glow .cd{fill:none;stroke-width:4;filter:drop-shadow(0 0 8px currentColor)}
+.glow .gt{position:absolute;font-family:Manrope,sans-serif;font-weight:800;color:#FFFFFF}
+.glow .gs{position:absolute;font-family:Inter,sans-serif;font-weight:500;color:#E9E3FF}
+.glow .gn{position:absolute;font-family:'IBM Plex Mono',monospace;font-weight:600}
+.glow .scan{position:absolute;left:276px;width:368px;height:28px;background:linear-gradient(transparent,rgba(0,240,255,.55),transparent);top:30px}
+.glow .side{position:absolute;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:30px;line-height:1.3;width:220px}
+.glow .sty{color:#00F0FF}
+.glow .fonte{color:#E9E3FF;background:rgba(13,2,33,.9);padding:2px 6px;left:20px}
+.glow .il-l{background:#FFE600;color:#0D0221}
+/* ---------- 4 · PIXEL ART (tela de jogo) ---------- */
+.pixel{background:#5C94FC;overflow:hidden}
+.pixel .px{position:absolute;font-family:'Press Start 2P',monospace;line-height:1.5}
+.pixel .bx{position:absolute;left:40px;right:40px;height:142px;background:#101436;border:6px solid #FFFFFF;box-shadow:8px 8px 0 #101013;box-sizing:border-box}
+.pixel .bx .n{position:absolute;left:24px;top:22px;font-family:'Press Start 2P',monospace;font-size:32px}
+.pixel .bx .bar{position:absolute;left:24px;top:78px;width:260px;height:26px;background:#2A2F5E;border:4px solid #FFFFFF;box-sizing:content-box}
+.pixel .bx .bar i{display:block;height:100%}
+.pixel .bx .d{position:absolute;left:330px;right:20px;top:20px;font-family:Inter,sans-serif;font-weight:700;font-size:24px;color:#FFFFFF;line-height:1.3}
+.pixel .bx .d small{display:block;font-weight:500;font-size:18px;color:#C7CEF5;margin-top:6px}
+.pixel .lv{position:absolute;font-family:'Press Start 2P',monospace;font-size:14px;color:#101013;background:#FFE600;padding:6px 8px;border:3px solid #101013}
+.pixel .ground{position:absolute;left:0;right:0;bottom:0;height:56px;background:repeating-linear-gradient(90deg,#C84C0C 0 46px,#8B2E00 46px 50px);border-top:8px solid #3AB54A}
+.pixel .cl{position:absolute;width:120px;height:30px;background:#FFFFFF;box-shadow:30px -20px 0 #FFFFFF,60px 0 0 #FFFFFF}
+.pixel .cn{position:absolute;width:20px;height:28px;background:#FFE600;border:4px solid #101013}
+.pixel .sty{color:#FFFFFF;font-family:'Press Start 2P',monospace;font-size:11px;bottom:20px}
+.pixel .fonte{color:#FFFFFF;bottom:20px}
+/* ---------- 5 · QUADRO DE GIZ (lousa verde, giz colorido) ---------- */
+.giz{background:#2F5D3A;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px),radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.08),transparent 60%);background-size:6px 6px,100% 100%;box-shadow:inset 0 0 0 16px #8B5A2B,inset 0 0 0 20px #5E3A17}
+.giz .ln{fill:none;stroke:#FFFFFF;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:url(#chalk);opacity:.92}
+.giz .lny{fill:none;stroke:#FFE066;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;filter:url(#chalk)}
+.giz .lnp{fill:none;stroke:#FF8FAB;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;filter:url(#chalk)}
+.giz .hw{position:absolute;font-family:Caveat,cursive;font-weight:700;color:#FFFFFF;line-height:1.05;white-space:nowrap}
+.giz .hw.y{color:#FFE066}
+.giz .hw.p{color:#FF8FAB}
+.giz .hw.b{color:#9ED8F5}
+.giz .du{position:absolute;width:6px;height:6px;border-radius:50%;background:#FFFFFF}
+.giz .sty{color:#D8E8DA;right:34px;bottom:28px}
+.giz .il-l{background:#FFE066;color:#101013;right:34px;top:32px}
 /* ---------- 6 · CTA ---------- */
 .ctaw{padding:36px 40px 0}
 .kw{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px}
@@ -138,97 +191,125 @@ def path(d, cls, delay, dur, L=2400):
     return f'<path class="{cls}" d="{d}" style="--L:{L};stroke-dasharray:{L};animation:draw {dur}s {delay}s both ease-in-out"/>'
 PAGS = []
 
-# ---------- 1 · capa em QUADRINHO: cliente, vendedor, a IA "sopra" a venda ----------
+# ---------- 1 · capa em QUADRINHO pop art: cliente, vendedor, a IA "sopra" a venda ----------
 def pessoa(x, y, cor, s=1.0):
     # boneco simples de HQ: cabeça, corpo, contorno grosso
     return (f'<g transform="translate({x} {y}) scale({s})">'
             f'<path d="M-60 210 C-60 120,60 120,60 210 Z" fill="{cor}" stroke="#101013" stroke-width="7" stroke-linejoin="round"/>'
-            f'<circle cx="0" cy="62" r="52" fill="#F4F1EA" stroke="#101013" stroke-width="7"/>'
+            f'<circle cx="0" cy="62" r="52" fill="#FFE8D1" stroke="#101013" stroke-width="7"/>'
             f'<circle cx="-18" cy="58" r="6" fill="#101013"/><circle cx="18" cy="58" r="6" fill="#101013"/>'
             f'<path d="M-16 86 Q0 98 16 86" fill="none" stroke="#101013" stroke-width="5" stroke-linecap="round"/></g>')
-q1 = (f'<div class="qd" style="left:34px;top:62px;width:410px;height:520px;animation:pop .5s .2s both">'
-      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(205, 300, "#3C4149", 1.05)}'
-      f'<rect x="60" y="500" width="290" height="40" fill="#A5A8AE" stroke="#101013" stroke-width="6"/></svg>'
+def estrela(x, y, r, cor, d):
+    import math
+    pts = ' '.join(f'{x + (r if k % 2 == 0 else r * .5) * math.cos(math.pi * k / 8):.1f},{y + (r if k % 2 == 0 else r * .5) * math.sin(math.pi * k / 8):.1f}' for k in range(16))
+    return f'<polygon points="{pts}" fill="{cor}" stroke="#101013" stroke-width="5" style="transform-origin:{x}px {y}px;animation:pop .4s {d}s both"/>'
+q1 = (f'<div class="qd a" style="left:34px;top:62px;width:410px;height:520px;animation:slamL .6s .2s both">'
+      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(205, 300, "#E63946", 1.05)}'
+      f'<path d="M150 330 L130 300 M260 330 L280 300 M205 318 L205 286" stroke="#101013" stroke-width="5" stroke-linecap="round" style="animation:fade .2s 1.2s both"/>'
+      f'<rect x="60" y="500" width="290" height="40" fill="#FFFFFF" stroke="#101013" stroke-width="6"/></svg>'
       f'<span class="cap">A CLIENTE</span></div>'
-      f'<div class="bl t" style="left:60px;top:140px;width:330px;animation:pop .45s 1.0s both">QUERO UMA GELADEIRA… MAS O DINHEIRO TÁ CURTO!</div>')
-q2 = (f'<div class="qd" style="left:476px;top:62px;width:410px;height:520px;animation:pop .5s .6s both">'
-      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(150, 300, "#DDA94F", 1.05)}'
-      f'<rect x="232" y="356" width="104" height="170" rx="16" fill="#101013" stroke="#101013" stroke-width="6"/>'
-      f'<rect x="244" y="372" width="80" height="120" rx="8" fill="#DDA94F" style="animation:flick 1s 2.6s 4"/>'
-      f'<text x="284" y="440" text-anchor="middle" font-family="Bangers" font-size="34" fill="#101013">IA</text></svg>'
+      f'<div class="bl t" style="left:60px;top:140px;width:330px;animation:pop .45s 1.0s both, wob 1.6s 1.5s infinite ease-in-out">QUERO UMA GELADEIRA… MAS O DINHEIRO <em>TÁ CURTO!</em></div>')
+q2 = (f'<div class="qd b" style="left:476px;top:62px;width:410px;height:520px;animation:slamR .6s .7s both">'
+      f'<svg class="sv" viewBox="0 0 410 540">{pessoa(150, 300, "#1D4ED8", 1.05)}'
+      f'<g style="transform-origin:284px 440px;animation:buzz .12s 2.6s 14 linear">'
+      f'<rect x="232" y="356" width="104" height="170" rx="16" fill="#101013"/>'
+      f'<rect x="244" y="372" width="80" height="120" rx="8" fill="#FFD23F"/>'
+      f'<text x="284" y="446" text-anchor="middle" font-family="Bangers" font-size="40" fill="#E63946">IA</text></g>'
+      f'<path d="M350 380 L378 368 M352 420 L384 420 M350 460 L378 472" stroke="#101013" stroke-width="6" stroke-linecap="round" style="animation:fade .1s 2.6s both, blinkS .24s 2.6s 7"/></svg>'
       f'<span class="cap">O VENDEDOR</span></div>'
-      f'<div class="bl tr" style="left:500px;top:140px;width:360px;font-size:34px;animation:pop .45s 2.0s both">"DIGITA O CPF DELA: A IA ME DIZ O QUE CABE NO BOLSO."</div>'
-      f'<div class="bum" style="left:690px;top:290px;animation:pop .4s 2.8s both, shake .5s 3.2s 4 both">BIP!</div>')
+      f'<div class="bl tr" style="left:500px;top:140px;width:360px;font-size:34px;animation:pop .45s 2.0s both">"DIGITA O CPF DELA: A IA ME DIZ O QUE <em>CABE NO BOLSO.</em>"</div>'
+      f'<svg class="star" style="left:0;top:0;width:920px;height:660px;pointer-events:none" viewBox="0 0 920 660">{estrela(760, 336, 74, "#FFFFFF", 2.7)}</svg>'
+      f'<div class="bum" style="left:676px;top:282px;animation:pop .4s 2.8s both, shake .5s 3.2s 4 both">BIP!</div>')
 PAGS.append((6.5, page('1/6', 'NA PRÁTICA', TB('A Casas Bahia pôs uma IA para soprar a venda no ouvido de <em>mais de 10 mil vendedores.</em>') + TP('Chama Bah.IA. Te mostro como funciona ↓'),
-    f'<div class="hq cena">{q1}{q2}{IL}{FB}<span class="sty">ESTILO · QUADRINHO</span></div>', 'Arraste →')))
+    f'<div class="hq cena"><div class="rays"></div><div class="dotsr"></div><div class="zoom">{q1}{q2}</div>{IL}{FB}<span class="sty">ESTILO · QUADRINHO</span></div>', 'Arraste →')))
 
 # ---------- 2 · FLAT VECTOR: CPF → 3 fontes de dados ----------
-ICO = lambda c: [f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><path d="M6 36 C6 24 34 24 34 36"/></svg>',
-                  f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round"><circle cx="17" cy="17" r="11"/><path d="M25 25 L36 36"/></svg>',
-                  f'<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6 H9 L13 27 H32 L36 12 H11"/><circle cx="15" cy="34" r="2.5"/><circle cx="30" cy="34" r="2.5"/></svg>']
-srcs = [(ICO('#DDA94F')[0], 'Perfil', 'quem é o cliente'), (ICO('#DDA94F')[1], 'Navegação', 'o que ele olhou no site'), (ICO('#101013')[2], 'Compras', 'o que já levou antes')]
-fl = (f'<div class="ph" {A("inL", .6, .2)}><div class="scr"></div><span class="cpf">CPF DO CLIENTE</span>'
-      f'<span class="in" style="--W:186px;animation:typ 1s .9s both steps(14)">123.456.789-00</span>'
-      f'<span class="bt" {A("pop", .4, 2.0)}>Consultar</span></div>')
-for k, (ic, t, s) in enumerate(srcs):
-    y = 130 + 150 * k
-    d = 2.5 + .55 * k
-    fl += f'<span class="ln" style="left:316px;top:{y + 49}px;width:80px;animation:grow .35s {d - .3:.2f}s both"></span>'
-    fl += f'<div class="src" style="top:{y}px;animation:inR .5s {d:.2f}s both cubic-bezier(.2,.8,.2,1)"><i style="background:{"#DDA94F" if k == 2 else "#101013"}">{ic}</i><div><b>{t}</b><span>{s}</span></div></div>'
+ICO = lambda c: [f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="13" r="7"/><path d="M6 36 C6 24 34 24 34 36"/></svg>',
+                  f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round"><circle cx="17" cy="17" r="11"/><path d="M25 25 L36 36"/></svg>',
+                  f'<svg width="38" height="38" viewBox="0 0 40 40" fill="none" stroke="{c}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6 H9 L13 27 H32 L36 12 H11"/><circle cx="15" cy="34" r="2.5"/><circle cx="30" cy="34" r="2.5"/></svg>']
+CORES = ['#4D7CFE', '#1FB5A9', '#FF6B6B']
+srcs = [('Perfil', 'quem é o cliente'), ('Navegação', 'o que ele olhou no site'), ('Compras', 'o que já levou antes')]
+fl = ''.join(f'<span class="blob" style="left:{x}px;top:{y}px;width:{w}px;height:{w}px;background:{c};opacity:.22;animation:float {t}s {-t / 3:.1f}s infinite ease-in-out"></span>'
+             for x, y, w, c, t in [(-60, 420, 260, '#FFC93C', 6), (700, -80, 240, '#4D7CFE', 7), (330, 520, 140, '#FF6B6B', 5), (820, 470, 120, '#1FB5A9', 6)])
+fl += (f'<div class="ph" style="animation:bounceIn 1s .1s both"><div class="scr"></div><span class="cpf">CPF DO CLIENTE</span>'
+       f'<span class="in" style="--W:180px;animation:typ 1s 1.0s both steps(14)">123.456.789-00</span>'
+       f'<span class="bt" style="animation:fade .3s .8s both, press .35s 2.1s both">Consultar</span>'
+       f'<span class="ok" style="animation:pop .4s 4.6s both">✓ histórico carregado</span></div>')
+fl += '<svg class="sv" viewBox="0 0 920 660">'
+for k in range(3):
+    y = 120 + 150 * k + 54
+    fl += f'<path d="M312 330 C 360 330, 360 {y}, 418 {y}" fill="none" stroke="{CORES[k]}" stroke-width="6" stroke-linecap="round" stroke-dasharray="4 14" style="animation:fade .3s {2.3 + .1 * k:.2f}s both"/>'
+fl += '</svg>'
+for k, (t, s) in enumerate(srcs):
+    y = 120 + 150 * k
+    d = 2.9 + .5 * k
+    yy = y + 54
+    for j in range(3):
+        fl += f'<span class="pk" style="background:{CORES[k]};offset-path:path(\'M312 330 C 360 330, 360 {yy}, 418 {yy}\');animation:travel .7s {2.3 + .25 * j + .15 * k:.2f}s both linear"></span>'
+    fl += f'<div class="src" style="top:{y}px;background:{CORES[k]};animation:flipIn .6s {d:.2f}s both cubic-bezier(.2,.8,.2,1)"><i>{ICO(CORES[k])[k]}</i><div><b>{t}</b><span>{s}</span></div></div>'
 PAGS.append((6.0, page('2/6', None, TB('1. O vendedor digita o CPF. <em>A IA lê o histórico do cliente.</em>') + TP('Perfil, o que ele olhou no site e o que já comprou.'),
     f'<div class="flat cena">{fl}{IL}{FB}<span class="sty">ESTILO · FLAT VECTOR</span></div>', 'Arraste →')))
 
-# ---------- 3 · TRAÇO NEON: a tela que volta para o vendedor ----------
+# ---------- 3 · TRAÇO NEON synthwave: a tela que volta para o vendedor ----------
 tela = 'M300 30 L620 30 Q650 30 650 60 L650 570 Q650 600 620 600 L300 600 Q270 600 270 570 L270 60 Q270 30 300 30 Z'
+NEON = ['#FF2BD6', '#FFE600', '#39FF14']
 cards = [(96, 'Cabe no bolso', 'geladeira X em 12x, perto do limite dela'), (256, 'Como abordar', 'ela olhou 3 modelos de 2 portas'), (416, 'Compare com', 'o modelo que ela salvou no site')]
-gl = f'<svg class="sv" viewBox="0 0 920 660">' + path(tela, 'ln', .2, 1.3, 2000)
-gl += '<path class="ln2" d="M420 60 L500 60" style="--L:80;stroke-dasharray:80;animation:draw .3s 1.4s both"/>'
+gl = '<div class="sun"></div><div class="floor"></div>'
+gl += f'<svg class="sv" viewBox="0 0 920 660"><path class="ph" d="{tela}" style="--L:2000;stroke-dasharray:2000;animation:draw 1.2s .2s both ease-in-out"/>'
+gl += '<path d="M420 60 L500 60" stroke="#00F0FF" stroke-width="4" stroke-linecap="round" style="animation:fade .2s 1.3s both"/>'
 for k, (y, t, s) in enumerate(cards):
-    gl += f'<rect class="ln2" x="296" y="{y}" width="328" height="140" rx="16" style="--L:940;stroke-dasharray:940;animation:draw .6s {1.6 + .7 * k:.2f}s both ease-in-out"/>'
+    gl += f'<rect class="cd" x="296" y="{y}" width="328" height="140" rx="16" stroke="{NEON[k]}" color="{NEON[k]}" style="--L:940;stroke-dasharray:940;animation:draw .6s {1.6 + .7 * k:.2f}s both ease-in-out, neonOn .8s {2.2 + .7 * k:.2f}s both"/>'
 gl += '</svg>'
+gl += '<div class="scan" style="animation:scan 1.4s 1.3s 2 linear both"></div>'
 for k, (y, t, s) in enumerate(cards):
     d = 2.0 + .7 * k
-    gl += f'<div class="gn" style="left:318px;top:{y + 18}px;font-size:22px;animation:fade .4s {d:.2f}s both">0{k + 1}</div>'
-    gl += f'<div class="gt" style="left:318px;top:{y + 48}px;width:290px;font-size:27px;line-height:1.15;animation:fade .4s {d + .1:.2f}s both">{t}</div>'
-    gl += f'<div class="gs" style="left:318px;top:{y + 84}px;width:290px;font-size:19px;line-height:1.25;animation:fade .4s {d + .2:.2f}s both">{s}</div>'
-gl += '<div class="gn" style="left:40px;top:250px;font-size:30px;width:210px;line-height:1.3;animation:fade .5s 4.2s both, flick 2s 4.8s infinite">em<br>segundos</div>'
-gl += '<div class="gn" style="left:690px;top:250px;font-size:30px;width:210px;line-height:1.3;animation:fade .5s 4.5s both">no<br>WhatsApp</div>'
+    gl += f'<div class="gn" style="left:318px;top:{y + 18}px;font-size:22px;color:{NEON[k]};text-shadow:0 0 12px {NEON[k]};animation:fade .3s {d:.2f}s both">0{k + 1}</div>'
+    gl += f'<div class="gt" style="left:318px;top:{y + 48}px;width:290px;font-size:27px;line-height:1.15;animation:wipe .5s {d + .1:.2f}s both, glitch 1.2s {d + .8:.2f}s 1">{t}</div>'
+    gl += f'<div class="gs" style="left:318px;top:{y + 84}px;width:290px;font-size:19px;line-height:1.25;animation:wipe .6s {d + .3:.2f}s both">{s}</div>'
+gl += '<div class="side" style="left:40px;top:230px;color:#00F0FF;text-shadow:0 0 14px #00F0FF;animation:neonOn 1s 4.2s both">em<br>segundos</div>'
+gl += '<div class="side" style="left:690px;top:230px;color:#FF2BD6;text-shadow:0 0 14px #FF2BD6;animation:neonOn 1s 4.6s both">no<br>WhatsApp</div>'
 PAGS.append((6.5, page('3/6', None, TB('2. A IA sugere <em>o que oferecer e como falar.</em>') + TP('Produto certo para o bolso e o perfil, abordagem e comparação.'),
     f'<div class="glow cena">{gl}{EX}{FB}<span class="sty">ESTILO · TRAÇO NEON</span></div>', 'Arraste →')))
 
-# ---------- 4 · PIXEL ART: o que a empresa diz que mudou ----------
-nums = [('10 MIL+', 'vendedores usam o copiloto', 'Casas Bahia (CTO e CEO)', ''),
-        ('+40%', 'de produtividade nas lojas físicas', 'CEO Renato Franklin, ao NeoFeed (ago/2026)', 'g'),
-        ('+50%', 'de conversão nas vendas pelo WhatsApp', 'CTO Filipe Jaske, à Baguete (set/2025) · canal todo', '')]
-px = ''
-for k, (n, d, s, c) in enumerate(nums):
-    t0 = .4 + 1.1 * k
-    px += (f'<div class="bx {c}" style="top:{70 + 176 * k}px;animation:pop .45s {t0:.2f}s both steps(4)">'
-           f'<span class="n" style="animation:fade .01s {t0 + .4:.2f}s both">{n}</span>'
-           f'<div class="d" style="animation:fade .01s {t0 + .6:.2f}s both">{d}<small>{s}</small></div></div>')
-px += ''.join(f'<i style="position:absolute;left:{x}px;top:{y}px;width:10px;height:10px;background:#DDA94F;animation:twk 1.2s {dl}s infinite steps(1)"></i>' for x, y, dl in [(120, 26, 0), (420, 34, .4), (700, 22, .8), (860, 40, .2)])
+# ---------- 4 · PIXEL ART tela de jogo: o que a empresa diz que mudou ----------
+nums = [('10MIL+', 'vendedores usam o copiloto', 'Casas Bahia (CTO e CEO)', '#FFE600', 100, 'PLAYERS'),
+        ('+40%', 'de produtividade nas lojas físicas', 'CEO Renato Franklin, ao NeoFeed (ago/2026)', '#3AB54A', 70, 'LEVEL UP!'),
+        ('+50%', 'de conversão nas vendas pelo WhatsApp', 'CTO Filipe Jaske, à Baguete (set/2025) · canal todo', '#FF4D6D', 80, 'COMBO!')]
+px = ''.join(f'<i class="cl" style="left:{x}px;top:{y}px;animation:float {t}s infinite ease-in-out"></i>' for x, y, t in [(90, 22, 7), (560, 34, 9)])
+px += '<div class="ground"></div>'
+for k, (n, d, s, c, w, lv) in enumerate(nums):
+    t0 = .4 + 1.2 * k
+    top = 52 + 160 * k
+    px += (f'<div class="bx" style="top:{top}px;border-color:{c};animation:pop .45s {t0:.2f}s both steps(4)">'
+           f'<span class="n" style="color:{c};animation:fade .01s {t0 + .3:.2f}s both, blinkS .2s {t0 + .3:.2f}s 3 steps(1)">{n}</span>'
+           f'<span class="bar"><i style="--W:{w}%;background:{c};animation:fillB .9s {t0 + .4:.2f}s both steps(10)"></i></span>'
+           f'<div class="d" style="animation:fade .01s {t0 + .7:.2f}s both">{d}<small>{s}</small></div></div>'
+           f'<span class="lv" style="right:58px;top:{top - 14}px;animation:pop .3s {t0 + 1.0:.2f}s both steps(3)">{lv}</span>')
+    px += ''.join(f'<i class="cn" style="left:{200 + 40 * j}px;top:{top + 20}px;animation:coin .6s {t0 + .9 + .12 * j:.2f}s both steps(6)"></i>' for j in range(3))
 PAGS.append((6.5, page('4/6', None, TB('3. O que a Casas Bahia <em>diz que mudou.</em>') + TP('Números da própria empresa, sem auditoria de fora.'),
     f'<div class="pixel cena">{px}{FB}<span class="sty">ESTILO · PIXEL ART</span></div>', 'Arraste →')))
 
-# ---------- 5 · QUADRO DE GIZ: no seu negócio ----------
+# ---------- 5 · QUADRO DE GIZ (lousa verde, giz colorido): no seu negócio ----------
 filt = ('<filter id="chalk"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="n"/>'
         '<feDisplacementMap in="SourceGraphic" in2="n" scale="5"/></filter>')
-passos = [('1.', 'Cadastre quem compra', '(nome e WhatsApp)'), ('2.', 'Anote o que levou e quando', '(planilha já serve)'), ('3.', 'Aí a IA sugere a próxima venda', '')]
+passos = [('Cadastre quem compra', '(nome e WhatsApp)', 'b'), ('Anote o que levou e quando', '(planilha já serve)', 'p'), ('Aí a IA sugere a próxima venda', '', 'y')]
 gz = f'<svg class="sv" viewBox="0 0 920 660">{filt}'
-gz += path('M60 108 L560 108', 'ln', .9, .5, 520)
+gz += path('M62 114 L540 114', 'lny', 1.2, .5, 520)
 for k in range(3):
-    y = 210 + 130 * k
-    gz += f'<rect class="ln" x="60" y="{y - 34}" width="46" height="46" style="--L:200;stroke-dasharray:200;animation:draw .35s {1.4 + 1.0 * k:.2f}s both"/>'
+    y = 220 + 120 * k
+    gz += f'<rect class="ln" x="62" y="{y - 34}" width="46" height="46" style="--L:200;stroke-dasharray:200;animation:draw .35s {1.5 + 1.0 * k:.2f}s both"/>'
     if k < 2:
-        gz += path(f'M68 {y - 12} L82 {y + 4} L106 {y - 40}', 'lng', 1.9 + 1.0 * k, .3, 90)
-# círculo dourado no passo 3 e seta
-gz += path('M118 455 C 118 398, 870 398, 870 455 C 870 514, 118 514, 124 450', 'lng', 4.6, .8, 1700)
+        gz += path(f'M70 {y - 12} L84 {y + 4} L108 {y - 40}', 'lny', 2.3 + 1.0 * k, .3, 90)
+gz += path('M120 448 C 120 394, 870 394, 870 448 C 870 506, 120 506, 126 442', 'lnp', 4.3, .8, 1700)
+gz += path('M890 560 C 860 520, 830 500, 790 498 M808 482 L788 498 L810 512', 'lnp', 5.1, .5, 300)
 gz += '</svg>'
-gz += '<div class="hw" style="left:60px;top:40px;font-size:56px;animation:fade .6s .3s both">E no seu negócio?</div>'
-for k, (n, t, s) in enumerate(passos):
-    y = 210 + 130 * k
-    gz += f'<div class="hw {"g" if k == 2 else ""}" style="left:130px;top:{y - 44}px;font-size:{50 if k < 2 else 52}px;animation:fade .5s {1.5 + 1.0 * k:.2f}s both">{t} <span style="font-size:34px;color:#A5A8AE">{s}</span></div>'
-gz += '<div class="hw" style="left:60px;top:560px;font-size:40px;animation:fade .6s 5.2s both">sem histórico, nenhuma IA adivinha nada.</div>'
+gz += '<div class="hw" style="left:62px;top:48px;font-size:58px;animation:wipe .9s .3s both steps(18)">E no seu negócio?</div>'
+for k, (t, s, c) in enumerate(passos):
+    y = 220 + 120 * k
+    d = 1.6 + 1.0 * k
+    gz += f'<div class="hw {c}" style="left:130px;top:{y - 46}px;font-size:{50 if k < 2 else 54}px;animation:wipe .8s {d:.2f}s both steps(16)">{t} <span style="font-size:34px;color:#D8E8DA">{s}</span></div>'
+    gz += ''.join(f'<i class="du" style="left:{140 + 70 * j + 30 * k}px;top:{y + 4}px;--dx:{(-1) ** j * 12}px;animation:dust .8s {d + .1 * j:.2f}s both"></i>' for j in range(5))
+gz += '<div class="hw" style="left:62px;top:552px;font-size:42px;animation:wipe 1s 5.4s both steps(20)">sem histórico, nenhuma IA adivinha nada.</div>'
 PAGS.append((7.0, page('5/6', None, TB('4. No seu negócio, o começo é <em>anotar quem compra o quê.</em>') + TP('A IA da Casas Bahia só funciona porque o histórico existe.'),
     f'<div class="giz cena">{gz}{EX}<span class="sty">ESTILO · QUADRO DE GIZ</span></div>', 'Arraste →')))
 
